@@ -2,7 +2,6 @@
 layout: about
 title: about
 permalink: /
-subtitle: <a href='#'>Affiliations</a>. Address. Contacts. Moto. Etc.
 
 profile:
   align: right
@@ -14,8 +13,8 @@ selected_papers: true # includes a list of papers marked as "selected={true}"
 social: true # includes social icons at the bottom of the page
 ---
 
-Write your biography here. Tell the world about yourself. Link to your favorite [subreddit](http://reddit.com). You can put a picture in, too. The code is already in, just name your picture `prof_pic.jpg` and put it in the `img/` folder.
+Hi! I'm Hanna Palya, a PhD student in mathematical epidemiology at the [Institute for Global Pandemic Planning, University of Warwick](https://warwick.ac.uk/fac/cross_fac/igpp/). My supervisors are [blah] and [blah].
 
-Put your address / P.O. box / other info right below your picture. You can also disable any of these elements by editing `profile` property of the YAML header of your `_pages/about.md`. Edit `_bibliography/papers.bib` and Jekyll will render your [publications page](/al-folio/publications/) automatically.
+My current research focus is on improving early detection of pandemics. I'm working on improving syndromic surveillance by developing novel clustering algorithms for syndromic data. You can read more about my work here, or get in touch via email to talk about it.
 
-Link to your social media connections, too. This theme is set up to use [Font Awesome icons](https://fontawesome.com/) and [Academicons](https://jpswalsh.github.io/academicons/), like the ones below. Add your Facebook, Twitter, LinkedIn, Google Scholar, or just disable all of them.
+Previously, I [wrote a paper advocating for DNA synthesis screening](https://www.sciencepolicyjournal.org/uploads/5/4/3/4/5434385/p%C3%A1lya_delaney_jspg_21-3.pdf), managed a cohort of summer research fellows, and studied biology and philosophy at the University of St Andrews. 
