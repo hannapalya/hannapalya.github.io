@@ -1,0 +1,91 @@
+---
+---
+
+@import "minima";
+
+// Typography improvements
+body {
+  font-family: "Palatino Linotype", Palatino, Palladio, "URW Palladio L", "Book Antiqua", Baskerville, "Bookman Old Style", "Bitstream Charter", "Nimbus Roman No9 L", Garamond, "Apple Garamond", "ITC Garamond Narrow", "New Century Schoolbook", "Century Schoolbook", "Century Schoolbook L", Georgia, serif;
+  font-size: 18px;
+  line-height: 1.7;
+  max-width: 1400px;
+  margin: 0 auto;
+  color: #111;
+  background-color: #fffff8;
+}
+
+// Content width
+.wrapper {
+  max-width: calc(900px - (30px * 2));
+}
+
+// Headings
+h1, h2, h3, h4, h5, h6 {
+  font-weight: 400;
+  margin-top: 2.1rem;
+  margin-bottom: 1.4rem;
+  line-height: 1;
+}
+
+// Links
+a {
+  color: #0066CC;
+  text-decoration: none;
+  
+  &:hover {
+    text-decoration: underline;
+  }
+}
+
+/* Square, responsive profile image */
+.profile-image {
+    width: 25%; /* Relative to container width */
+    max-width: 250px; /* Maximum size */
+    aspect-ratio: 1/1; /* Force square shape */
+    object-fit: cover; /* Maintain aspect ratio but fill the square */
+    border-radius: 0px; /* Slightly rounded corners */
+    float: right; /* Position on right */
+    margin: 0 0 20px 20px; /* Create space around image */
+  }
+// Post list styling
+.post-list {
+  margin-left: 0;
+  list-style: none;
+  
+  > li {
+    margin-bottom: $spacing-unit * 1.5;
+  }
+}
+
+.post-meta {
+  font-size: 0.8em;
+  color: #666;
+  font-style: italic;
+  margin-bottom: 1rem;
+}
+
+.post-link {
+  display: block;
+  font-size: 1.5em;
+}
+
+// Blog post layout
+.post-title {
+  font-size: 2em;
+  letter-spacing: -1px;
+  line-height: 1.2;
+}
+
+.blog-posts article {
+  margin-bottom: 4rem;
+}
+
+/* Responsive adjustments */
+@media screen and (max-width: 600px) {
+    .profile-image {
+      width: 50%; /* Larger relative size on small screens */
+      float: none;
+      margin: 0 auto 20px auto;
+      display: block;
+    }
+}

@@ -1,0 +1,13 @@
+---
+layout: default
+---
+
+<div class="home">
+  <div class="profile-section">
+    <img src="/assets/images/hanna-photo.jpg" alt="Hanna Pálya" class="profile-image">
+    </div>
+  </div>
+
+  {% capture about_content %}{% include_relative about.md %}{% endcapture %}
+  {{ about_content | markdownify }}
+</div>
