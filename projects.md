@@ -6,4 +6,4 @@ show_title: false
 ---
 
 ## Improving clustering algorithms for syndromic surveillance
-I'm currently working on automating clustering of syndromic data using machine learning.  
+As part of my PhD, I'm currently working on a pre-syndromic surveillance tool which groups symptoms reported from emergency rooms into clusters of disease. 
