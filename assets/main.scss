@@ -93,6 +93,9 @@ a {
 
 /* Site header */
 .site-header {
+  border-top: none !important;
+  border-bottom: none !important;
+
   min-height: 55.95px;
   position: relative;
 }
