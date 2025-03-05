@@ -5,7 +5,7 @@
 
 :root {
   /* Light mode variables  */
-  --background-color: #fffff8;
+  --background-color: #F2F3F4;
   --text-color: #111;
   --heading-color: #111;
   --link-color: #0066CC;
@@ -93,8 +93,6 @@ a {
 
 /* Site header */
 .site-header {
-  border-top: 5px solid var(--header-border-color);
-  border-bottom: 1px solid var(--border-color);
   min-height: 55.95px;
   position: relative;
 }
