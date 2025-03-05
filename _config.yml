@@ -23,7 +23,7 @@ email: hannapalya@gmail.com
 description: >- # this means to ignore newlines until "baseurl:"
   Hanna Pálya's personal site: mathematical epidemiology and statistical modelling galore.
 baseurl: "" # the subpath of your site, e.g. /blog
-url: "" # the base hostname & protocol for your site, e.g. http://example.com
+url: "http://hannapalya.com"
 twitter_username: hannapalya5
 github_username:  hannapalya
 
