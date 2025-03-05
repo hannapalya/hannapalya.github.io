@@ -16,7 +16,7 @@
   --blockquote-color: #828282;
   --table-background: #f7f7f7;
   --table-header-background: #efefef;
-  --footer-background: #f5f5f5;
+  --footer-background: #F2F3F4;
   --footer-text: #828282;
 }
 
@@ -33,7 +33,7 @@
   --blockquote-color: #a0a0a0;
   --table-background: #2c2c2c;
   --table-header-background: #333;
-  --footer-background: #222;
+  --footer-background: #1a1a1a;
   --footer-text: #999;
 }
 
@@ -99,16 +99,6 @@ a {
 
 .site-title {
   position: relative;
-  transition: color 0.3s ease;
-  
-  &:hover {
-    color: #ddd;
-    
-    &:before {
-      transform: scaleX(1);
-      opacity: 1;
-    }
-  }
   
   &:before {
     font-size: 26px;
