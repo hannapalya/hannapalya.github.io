@@ -7,7 +7,7 @@ layout: page
 
 ![Hanna Pálya](/assets/images/hanna-photo.jpg){: .profile-image}
 
-Hi! I'm Hanna Palya, a PhD student in mathematical epidemiology at the [Institute for Global Pandemic Planning, University of Warwick](https://warwick.ac.uk/fac/cross_fac/igpp/). I'm supervised by [Mike Tildesley](https://warwick.ac.uk/fac/sci/lifesci/people/mtildesley/), [Daniel Todkill](https://warwick.ac.uk/fac/sci/med/staff/dtodkill/), [Matt Keeling](https://warwick.ac.uk/fac/sci/maths/people/staff/matt_keeling/), and [Angela Noufaily](https://warwick.ac.uk/fac/sci/med/staff/anoufaily/).
+Hi! I'm Hanna Pálya, a PhD student in mathematical epidemiology at the [Institute for Global Pandemic Planning, University of Warwick](https://warwick.ac.uk/fac/cross_fac/igpp/). I'm supervised by [Mike Tildesley](https://warwick.ac.uk/fac/sci/lifesci/people/mtildesley/), [Daniel Todkill](https://warwick.ac.uk/fac/sci/med/staff/dtodkill/), [Matt Keeling](https://warwick.ac.uk/fac/sci/maths/people/staff/matt_keeling/), and [Angela Noufaily](https://warwick.ac.uk/fac/sci/med/staff/anoufaily/).
 
 My current research focus is on improving early detection of pandemics. I'm working on improving syndromic surveillance by developing novel clustering algorithms for syndromic data. You can read more about my work [here](/projects), or get in touch via [email](mailto:hannapalya@gmail.com) to talk about it.
 
