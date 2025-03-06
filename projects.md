@@ -18,10 +18,10 @@ Every month I come up with a theme and questions for the [Estimation Game](https
 
 
 ## Crocheting
-I've made clothes for myself and my partner, and accessories for my friends :)) Currently working on a vest made of flowers. Photos coming soon!
-<div style="display: flex; flex-wrap: wrap; gap: 10px; margin-top: 15px;">
-  <img src="/assets/dino.png" alt="Crochet project 1" style="width: 180px; height: auto;">
-  <img src="/assets/cardi.png" alt="Crochet project 2" style="width: 180px; height: auto;">
-  <img src="/assets/hat.png" alt="Crochet project 3" style="width: 180px; height: auto;">
-  <img src="/assets/scarf.png" alt="Crochet project 4" style="width: 180px; height: auto;">
+<div style="position: relative; min-height: 400px; margin-top: 15px;">
+  <img src="/assets/dino.png" alt="Crochet project 1" style="position: absolute; width: 150px; height: auto; top: 0; left: 0;">
+  <img src="/assets/cardi.png" alt="Crochet project 2" style="position: absolute; width: 150px; height: auto; top: 50px; right: 20px;">
+  <img src="/assets/hat.png" alt="Crochet project 3" style="position: absolute; width: 150px; height: auto; top: 180px; left: 100px;">
+  <img src="/assets/scarf.png" alt="Crochet project 4" style="position: absolute; width: 150px; height: auto; top: 220px; right: 150px;">
+  <div style="padding: 15px 180px 0 180px;">I've made clothes for myself and my partner, and accessories for my friends :)) Currently working on a vest made of flowers.</div>
 </div>
