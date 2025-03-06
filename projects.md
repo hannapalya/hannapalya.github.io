@@ -19,3 +19,9 @@ Every month I come up with a theme and questions for the [Estimation Game](https
 
 ## Crocheting
 I've made clothes for myself and my partner, and accessories for my friends :)) Currently working on a vest made of flowers. Photos coming soon!
+<div style="display: flex; flex-wrap: wrap; gap: 10px; margin-top: 15px;">
+  <img src="/assets/dino.png" alt="Crochet project 1" style="width: 180px; height: auto;">
+  <img src="/assets/cardi.png" alt="Crochet project 2" style="width: 180px; height: auto;">
+  <img src="/assets/hat.png" alt="Crochet project 3" style="width: 180px; height: auto;">
+  <img src="/assets/scarf.png" alt="Crochet project 4" style="width: 180px; height: auto;">
+</div>
