@@ -50,6 +50,24 @@ body {
 }
 
 /* Typography */
+:root {
+  --base-font-size: clamp(16px, 2vw, 18px);
+  --h1-size: clamp(2rem, 5vw, 2.5rem);
+  --h2-size: clamp(1.75rem, 4vw, 2rem);
+  --h3-size: clamp(1.5rem, 3.5vw, 1.6rem);
+}
+
+body {
+  font-family: "Palatino Linotype", Palatino, Palladio, "URW Palladio L", "Book Antiqua", Baskerville, "Bookman Old Style", "Bitstream Charter", "Nimbus Roman No9 L", Garamond, "Apple Garamond", "ITC Garamond Narrow", "New Century Schoolbook", "Century Schoolbook", "Century Schoolbook L", Georgia, serif;
+  font-size: var(--base-font-size);
+  line-height: 1.7;
+  color: var(--text-color);
+  background-color: var(--background-color);
+  max-width: 1400px;
+  margin: 0 auto;
+  transition: color 0.3s ease, background-color 0.3s ease;
+}
+
 h1, h2, h3, h4, h5, h6 {
   font-weight: 400;
   color: var(--heading-color);
@@ -58,19 +76,9 @@ h1, h2, h3, h4, h5, h6 {
   margin-bottom: 1.4rem;
 }
 
-h1 {
-  font-size: 2.5em;
-  letter-spacing: -0.02em;
-}
-
-h2 {
-  font-size: 2em;
-  letter-spacing: -0.01em;
-}
-
-h3 {
-  font-size: 1.6em;
-}
+h1 { font-size: var(--h1-size); }
+h2 { font-size: var(--h2-size); }
+h3 { font-size: var(--h3-size); }
 
 /* Links */
 a {
@@ -128,16 +136,16 @@ a {
 .site-nav {
   float: right;
   line-height: 54px;
-  
+  color: var(--background-color);
   .page-link {
     color: var(--text-color);
     line-height: 1.5;
     margin-right: 20px;
     transition: color 0.2s ease;
     
-    &:hover {
+    /* &:hover {
       color: var(--link-color);
-    }
+    } */
   }
 }
 
@@ -220,10 +228,14 @@ input:checked + .slider:before {
   height: 200px;
   aspect-ratio: 1/1;
   object-fit: cover;
-  border-radius: 4px;
-  float: right;
+  border-radius: 2px; /* no rounded corners for me thank u */
+  float: right !important ;
   margin: 0 0 20px 20px;
-  box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+  /* box-shadow: 0 3px 10px rgba(0,0,0,0.1); */
+}
+
+p {
+  margin-bottom: 1em;
 }
 
 /* Code formatting */
@@ -291,7 +303,7 @@ table {
   color: var(--heading-color);
 }
 
-/* Responsive adjustments */
+/* Responsive adjustments 
 @media screen and (max-width: 600px) {
   .site-nav {
     position: absolute;
@@ -321,4 +333,134 @@ table {
     display: block;
     text-align: center;
   }
+}
+*/
+
+/* Add to your /assets/main.scss file */
+
+/* Basic responsive improvements */
+img {
+  max-width: 100%;
+  height: auto;
+}
+
+
+/* Profile image */
+.profile-image {
+  max-width: 200px;
+  width: 30%;
+  aspect-ratio: 1/1;
+  object-fit: cover;
+  border-radius: 0;
+  float: right;
+  margin: 0 0 20px 20px;
+  box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+}
+
+@media screen and (max-width: 768px) {
+  .profile-image,
+  img.profile-image {
+    float: none;
+    display: block;
+    margin: 0 auto 20px auto;
+    max-width: 150px;
+    width: 100%;
+    height: auto;
+  }
+  
+  /* Fix any container divs that might be affecting layout */
+  .profile-section {
+    float: none;
+    display: block;
+    margin: 0 auto 20px auto;
+    width: 100%;
+  }
+  
+  /* Ensure text has room to flow */
+  p, h1, h2, h3, h4, h5, h6 {
+    clear: both;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+    hyphens: auto;
+  }
+  .site-nav {
+    background-color: var(--background-color);
+    border: 1px solid var(--border-color);
+    border-radius: 5px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    
+  }
+  
+  .site-nav label[for="nav-trigger"] {
+    background-color: var(--background-color);
+    border: none;
+    padding: 5px;
+  }
+  
+  .site-nav .menu-icon > svg {
+    fill: var(--text-color);
+  }
+  
+  /* Make sure the dropdown has the same background */
+  .site-nav .trigger {
+    background-color: var(--background-color);
+    padding-right: 15px;
+  }
+  
+  .site-nav .page-link {
+    color: var(--text-color);
+    text-align: right;
+    margin-left: 0;
+    margin-right: 0;
+    display: block;
+    padding: 10px 15px;
+    border-bottom: 1px solid var(--border-color);
+  }
+  
+  .site-nav .page-link:last-child {
+    border-bottom: none;
+  }
+  
+  /* Profile image adjustments for mobile */
+  .profile-image {
+    width: 150px;
+    height: 150px;
+    float: right !important ;
+    margin: 0 auto 20px auto;
+    display: block;
+  }
+}
+
+/* Fix for the crocheting section with absolute positioning */
+@media screen and (max-width: 768px) {
+  /* Convert the absolute positioning to a simple flex layout */
+  .post-content div[style*="position: relative"] {
+    display: flex;
+    flex-direction: column;
+    min-height: 0;
+    margin: 15px 0;
+  }
+  
+  .post-content img[style*="position: absolute"] {
+    position: static !important;
+    width: 150px;
+    margin: 10px auto;
+  }
+  
+  .post-content div[style*="padding: 15px 180px"] {
+    padding: 15px 0 !important;
+    order: -1; /* Move text above the images */
+  }
+}
+
+/* Make sure images don't overflow their containers */
+img {
+  max-width: 100%;
+  height: auto;
+}
+
+/* Ensure proper text wrapping */
+p {
+  word-wrap: break-word;
+  overflow-wrap: break-word;
 }
