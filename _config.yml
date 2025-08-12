@@ -21,7 +21,7 @@
 title: Hanna Pálya
 email: hannapalya@gmail.com
 description: >- # this means to ignore newlines until "baseurl:"
-  Hanna Pálya's personal site: mathematical epidemiology and statistical modelling galore.
+  Hanna Pálya's personal site: mathematical epidemiology, syndromic surveillance, and ML for early detection.
 baseurl: "" # the subpath of your site, e.g. /blog
 url: "http://hannapalya.com"
 twitter_username: hannapalya5
@@ -32,6 +32,8 @@ theme: minima
 plugins:
   - jekyll-feed
   - jekyll-redirect-from
+  - jekyll-sitemap
+  - jekyll-seo-tag
 
 
 
