@@ -5,8 +5,8 @@
 
 :root {
   /* Light mode variables  */
-  --background-color: #F2F3F4;
-  --text-color: #111;
+  --background-color: #fffef5;
+  --text-color: #2c3e50;
   --heading-color: #111;
   --link-color: #0066CC;
   --link-hover-color: #0044aa;
@@ -16,8 +16,10 @@
   --blockquote-color: #828282;
   --table-background: #f7f7f7;
   --table-header-background: #efefef;
-  --footer-background: #F2F3F4;
-  --footer-text: #828282;
+  --footer-background: #fffef5;
+  --footer-text: #2c3e50;
+
+  
 }
 
 /* Dark mode variables */
@@ -39,7 +41,7 @@
 
 /* Base elements */
 body {
-  font-family: "Palatino Linotype", Palatino, Palladio, "URW Palladio L", "Book Antiqua", Baskerville, "Bookman Old Style", "Bitstream Charter", "Nimbus Roman No9 L", Garamond, "Apple Garamond", "ITC Garamond Narrow", "New Century Schoolbook", "Century Schoolbook", "Century Schoolbook L", Georgia, serif;
+  font-family: 'Iowan Old Style', 'Palatino Linotype', Palatino, Georgia, serif;
   font-size: 18px;
   line-height: 1.7;
   color: var(--text-color);

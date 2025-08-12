@@ -1,9 +1,41 @@
 ---
-# Feel free to add content and custom Front Matter to this file.
-# To modify the layout, see https://jekyllrb.com/docs/themes/#overriding-theme-defaults
-
-layout: page
+layout: page    
 ---
+<div style="padding-top: 10vh;"></div>
+
+<style>
+.content-with-image {
+  display: flex;
+  gap: 2rem;
+  align-items: flex-start;
+}
+
+.text-content {
+  flex: 1;
+}
+
+.profile-image {
+  width: 300px;
+  height: auto;
+  flex-shrink: 0;
+  flex: 2;
+}
+
+/* stack vertically for small screens */
+@media (max-width: 768px) {
+  .content-with-image {
+    flex-direction: column;
+  }
+  
+  .profile-image {
+    width: 100%;
+    max-width: 400px;
+    margin: 0 auto; 
+    align-items: flex-start;
+  }
+}
+</style>
+
 
 ![Hanna Pálya](/assets/images/hanna-photo.jpg){: .profile-image}
 

@@ -13,3 +13,46 @@ layout: default
   </div>
 
 </article>
+
+<style>
+/* Minimal CSS additions for flexbox content */
+.post-content .flex-container {
+  display: flex;
+  gap: 2rem;
+  align-items: flex-start; /* Aligns image to top of text */
+  margin-bottom: 2rem;
+}
+
+.post-content .flex-container.reverse {
+  flex-direction: row-reverse;
+}
+
+.post-content .flex-image {
+  flex: 0 0 auto;
+  width: 40%;
+}
+
+.post-content .flex-image img {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+.post-content .flex-text {
+  flex: 1;
+  min-width: 0; /* Prevents text overflow */
+}
+
+/* Mobile responsive */
+@media (max-width: 768px) {
+  .post-content .flex-container,
+  .post-content .flex-container.reverse {
+    flex-direction: column;
+  }
+  
+  .post-content .flex-image {
+    width: 100%;
+  }
+}
+</style>
+
