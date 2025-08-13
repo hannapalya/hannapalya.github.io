@@ -1,5 +1,9 @@
 ---
-layout: page    
+layout: page
+title: "Hanna Pálya"
+description: "Hanna Pálya - biosecurity, ML for early detection"
+show_title: false
+
 ---
 <div style="padding-top: 10vh;"></div>
 
