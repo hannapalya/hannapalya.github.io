@@ -21,9 +21,9 @@
 title: Hanna Pálya
 email: hannapalya@gmail.com
 description: >- # this means to ignore newlines until "baseurl:"
-  Hanna Pálya's personal site: mathematical epidemiology, syndromic surveillance, and ML for early detection.
-baseurl: "" # the subpath of your site, e.g. /blog
-url: "http://hannapalya.com"
+  Hanna Pálya's personal site: PhD student at Warwick, researching biosecurity, syndromic surveillance, and ML for early detection.
+url: "https://hannapalya.com"
+
 twitter_username: hannapalya5
 github_username:  hannapalya
 
