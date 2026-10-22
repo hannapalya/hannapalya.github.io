@@ -1,0 +1,33 @@
+---
+layout: default
+---
+<div class="wrap hero">
+  <div class="title">
+    <h1 class="name">{{ site.title }}</h1>
+  </div>
+  <div class="lede-col">
+{{ content }}
+    <p class="links"><a href="mailto:{{ site.email }}">{{ site.email }}</a>&nbsp;<span class="sep" aria-hidden="true">·</span> <a href="{{ site.links.scholar }}">Google&nbsp;Scholar</a>&nbsp;<span class="sep" aria-hidden="true">·</span> <a href="{{ site.links.github }}">GitHub</a>&nbsp;<span class="sep" aria-hidden="true">·</span> <a href="{{ site.links.linkedin }}">LinkedIn</a>&nbsp;<span class="sep" aria-hidden="true">·</span> <a href="{{ site.links.x }}">X</a></p>
+  </div>
+</div>
+
+<div class="wrap parts">
+  <section class="sec" id="publications" aria-labelledby="pubs-h">
+    <h2 class="label" id="pubs-h">writing</h2>
+    <div class="body">
+      <ul class="list" role="list">
+        {%- for p in site.data.publications %}
+        <li>{% if p.url %}<a href="{{ p.url }}">{{ p.title | escape }}</a>{% else %}{{ p.title | escape }}{% endif %}
+          {%- if p.year %} ({{ p.year }}){% endif %}</li>
+        {%- endfor %}
+      </ul>
+    </div>
+  </section>
+
+  <section class="sec" id="projects" aria-labelledby="projects-h">
+    <h2 class="label" id="projects-h">other projects</h2>
+    <p class="body">
+      {%- for item in site.data.other_projects %}{% unless forloop.first %}&nbsp;<span class="sep" aria-hidden="true">·</span> {% endunless %}<a href="{{ item.url }}">{{ item.label | escape }}</a>{% endfor -%}
+    </p>
+  </section>
+</div>

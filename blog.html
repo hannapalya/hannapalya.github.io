@@ -1,0 +1,15 @@
+---
+title: Writing
+permalink: /blog/
+prose: false
+sitemap: false   # while there are no posts; delete this line with the first post
+---
+{%- if site.posts.size > 0 %}
+<ul class="list" role="list">
+  {%- for post in site.posts %}
+  <li><a href="{{ post.url | relative_url }}">{{ post.title | escape }}</a>, <time datetime="{{ post.date | date_to_xmlschema }}">{{ post.date | date: "%-d %b %Y" }}</time></li>
+  {%- endfor %}
+</ul>
+{%- else %}
+<p class="muted">Nothing here yet.</p>
+{%- endif %}

@@ -1,0 +1,7 @@
+# The "other projects" line on the home page, under writing: one link per entry, in this order,
+# separated by "·", with no descriptions. Each entry is a `label` (the link's text, a word or two)
+# and a `url`. check_site.py expects exactly these links (OTHER_PROJECTS), so add a new one there too.
+- label: Cliver
+  url: https://cliver.bio
+- label: Estimation Game
+  url: https://www.quantifiedintuitions.org/estimation-game

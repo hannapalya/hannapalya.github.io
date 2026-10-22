@@ -1,63 +1,80 @@
-# Welcome to Jekyll!
-#
-# This config file is meant for settings that affect your whole blog, values
-# which you are expected to set up once and rarely edit after that. If you find
-# yourself editing this file very often, consider using Jekyll's data files
-# feature for the data you need to update frequently.
-#
-# For technical reasons, this file is *NOT* reloaded automatically when you use
-# 'bundle exec jekyll serve'. If you change this file, please restart the server process.
-#
-# If you need help with YAML syntax, here are some quick references for you:
-# https://learn-the-web.algonquindesign.ca/topics/markdown-yaml-cheat-sheet/#yaml
-# https://learnxinyminutes.com/docs/yaml/
-#
-# Site settings
-# These are used to personalize your new site. If you look in the HTML files,
-# you will see them accessed via {{ site.title }}, {{ site.email }}, and so on.
-# You can create any custom variable you would like, and they will be accessible
-# in the templates via {{ site.myvariable }}.
-
+# Site settings. Restart `jekyll serve` after editing this file.
 title: Hanna Pálya
-email: hannapalya@gmail.com
-description: >- # this means to ignore newlines until "baseurl:"
-  Hanna Pálya's personal site: PhD student at Warwick, researching biosecurity, syndromic surveillance, and ML for early detection.
+tagline: Researcher, Centre for the Governance of AI
+description: >-
+  Hanna Pálya is a researcher at the Centre for the Governance of AI, where she
+  studies how advances in AI could change biological risks.
 url: "https://hannapalya.com"
+baseurl: ""
+lang: en
+locale: en_GB      # og:locale (language_TERRITORY); `lang` stays the <html lang>
+email: hannapalya@gmail.com
+repository: hannapalya/hannapalya.github.io
 
-twitter_username: hannapalya5
-github_username:  hannapalya
+# No theme: the site has its own layouts. (GitHub Pages would otherwise apply jekyll-theme-primer.)
+theme: null
 
-# Build settings
-theme: minima
+author:
+  name: Hanna Pálya
+  url: https://hannapalya.com/
+  twitter: hannapalya5   # twitter:creator; the same handle as twitter.username and the X link
+
+links:
+  scholar: https://scholar.google.com/citations?user=eGmhzDoAAAAJ
+  github: https://github.com/hannapalya
+  linkedin: https://www.linkedin.com/in/hanna-palya
+  x: https://x.com/hannapalya5
+
+# The jellyfish's bell is a secret link, like the stars in _data/stars.yml: it looks the same until
+# you hover over it or tab to it, when its glow brightens and the label shows beside it. Keep the
+# label short and lowercase.
+jellyfish:
+  label: moon jelly
+  url: https://en.wikipedia.org/wiki/Aurelia_aurita
+
+social:
+  name: Hanna Pálya
+  links:
+    - https://scholar.google.com/citations?user=eGmhzDoAAAAJ
+    - https://github.com/hannapalya
+    - https://www.linkedin.com/in/hanna-palya
+    - https://x.com/hannapalya5
+
+twitter:
+  username: hannapalya5
+  card: summary_large_image
+
+permalink: /blog/:year/:title/
+markdown: kramdown
+kramdown:
+  input: GFM
+  hard_wrap: false
+
 plugins:
   - jekyll-feed
   - jekyll-redirect-from
   - jekyll-sitemap
   - jekyll-seo-tag
 
+defaults:
+  - scope:
+      path: ""
+    values:
+      layout: page
+      image: /assets/img/social-card.png
+  - scope:
+      path: ""
+      type: posts
+    values:
+      layout: post
 
-
-header_pages:
-  - projects.md
-  - papers.md
-  - blog.md
-
-# Exclude from processing.
-# The following items will not be processed, by default.
-# Any item listed under the `exclude:` key here will be automatically added to
-# the internal "default list".
-#
-# Excluded items can be processed by explicitly listing the directories or
-# their entries' file path in the `include:` list.
-#
-# exclude:
-#   - .sass-cache/
-#   - .jekyll-cache/
-#   - gemfiles/
-#   - Gemfile
-#   - Gemfile.lock
-#   - node_modules/
-#   - vendor/bundle/
-#   - vendor/cache/
-#   - vendor/gems/
-#   - vendor/ruby/
+exclude:
+  - README.md
+  - Gemfile
+  - Gemfile.lock
+  - scripts/
+  - docs/
+  - vendor/
+  - .bundle/
+  - .jekyll-cache/
+  - .sass-cache/

@@ -1,0 +1,16 @@
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Person",
+  "@id": "{{ site.url }}/#person",
+  "name": {{ site.author.name | jsonify }},
+  "url": "{{ site.url }}/",
+  "image": "{{ site.url }}/assets/img/hanna.jpg",
+  "email": {{ site.email | prepend: "mailto:" | jsonify }},
+  "jobTitle": "Researcher",
+  "worksFor": { "@type": "Organization", "name": "Centre for the Governance of AI", "url": "https://www.governance.ai" },
+  "alumniOf": { "@type": "CollegeOrUniversity", "name": "University of St Andrews" },
+  "homeLocation": { "@type": "Place", "name": "London" },
+  "sameAs": {{ site.social.links | jsonify }}
+}
+</script>

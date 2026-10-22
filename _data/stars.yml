@@ -1,0 +1,27 @@
+# Stars that lead somewhere: some of the hand-drawn stars in the sky on the home page are secret
+# links. A linked star looks like the others until you hover over it or tab to it; then it brightens
+# and its label appears beside it. A click opens the link in the same tab.
+#
+# One entry per star, in priority order:
+#
+#   - label: as above                                            # shown beside the star: lowercase, a few words
+#     url: "https://phoebebridgers.bandcamp.com/track/as-above"  # where it leads (keep the quotes)
+#
+# At most five, one for each star in clear sky. The first three are on every screen. The fourth shows
+# on phones and on screens wider than about 1040px, the fifth only on screens about 1400px wide or
+# more (it has room for a short label only). After editing, run scripts/check_site.py and
+# scripts/check_layout.py, and look at the labels on a phone and on a wide screen: a long label can run
+# into the text or the jellyfish.
+#
+# The jellyfish's bell is a secret link too. Its label and url are not here but under jellyfish: in
+# _config.yml.
+- label: virtue ethics
+  url: "https://course-resources-uae.minervaproject.com/uploaded_files/production/00321932-1932/how-should-one-live-essays-on-the-virtues-------2.-normative-virtue-ethics-.pdf"
+- label: dzsuang dszi álma
+  url: "https://www.magyarulbabelben.net/index.php?page=work&interfaceLang=en&literatureLang=hu&translationLang=all&auth_id=585&work_id=81408&tran_id=81409&tr_id=0&tran_lang=en"
+- label: as above
+  url: "https://phoebebridgers.bandcamp.com/track/as-above"
+- label: the bridge of san luis rey
+  url: "https://www.gutenberg.org/cache/epub/69768/pg69768-images.html"
+- label: werckmeister
+  url: "https://www.reddit.com/r/movies/comments/1mxc9aq/the_intro_to_b%C3%A9la_tarrs_werckmeister_harmonies/"

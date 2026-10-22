@@ -1,0 +1,18 @@
+---
+title: Crochet
+permalink: /crochet/
+prose: false
+---
+<p>I’ve made clothes for myself and my partner, and accessories for my friends. More photos when I remember to take them.</p>
+<ul class="gallery" role="list">
+  {%- for p in site.data.crochet %}
+  <li>
+    <figure>
+      <img src="{{ p.src }}" srcset="{{ p.src | replace: '.webp', '-480.webp' }} 480w, {{ p.src }} {{ p.width }}w"
+           sizes="(max-width: 47.5em) 45vw, 11rem" width="{{ p.width }}" height="{{ p.height }}" alt="{{ p.alt | escape }}"
+           {%- if forloop.index > 3 %} loading="lazy"{% endif %}>
+      <figcaption>{{ p.caption | escape }}</figcaption>
+    </figure>
+  </li>
+  {%- endfor %}
+</ul>

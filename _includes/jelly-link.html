@@ -1,0 +1,12 @@
+{%- comment -%}
+  The jellyfish's link: its bell is a secret link to jellyfish.url in _config.yml, named by
+  jellyfish.label, like the stars that lead somewhere (star-links.html). The link must not be inside the
+  aria-hidden drawing, so it is laid over it: its parent is a positioned box the size of the drawing
+  (on the home page .jelly-box, after <main>, so it is in tab order after the page's own links; on the
+  404 page .jelly-frame, around the figure). site.css lets only the bell and the oral arms take the
+  pointer (the link's ::before and ::after), brightens the bell's glow on hover and focus, and shows the
+  label beside the bell.
+{%- endcomment -%}
+{%- if site.jellyfish.url -%}
+<a class="jelly-link" href="{{ site.jellyfish.url | escape }}"><span class="jelly-label">{{ site.jellyfish.label | escape }}</span></a>
+{%- endif -%}

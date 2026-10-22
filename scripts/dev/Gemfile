@@ -1,0 +1,17 @@
+# The gems for building and previewing the site with macOS's built-in Ruby 2.6, which needs no
+# Homebrew or admin rights. It is the same github-pages release (231: Jekyll 3.9.5 and the same
+# plugins) as the repo Gemfile, with the gems it pulls in held at the last versions that still run
+# on Ruby 2.6; Gemfile.lock next to this file pins every version. Install with
+# scripts/dev/install.sh (into vendor/dev/ in the repo, which git ignores and Jekyll excludes);
+# scripts/build_local.sh and scripts/serve_local.sh then use it whenever Ruby is older than 3.
+source "https://rubygems.org"
+
+gem "github-pages", "231", group: :jekyll_plugins
+gem "webrick", "~> 1.7"          # `jekyll serve`
+gem "ffi", "< 1.17"
+gem "nokogiri", "< 1.14"
+gem "public_suffix", "< 5"
+gem "activesupport", "< 7"
+gem "zeitwerk", "< 2.7"
+gem "i18n", "< 1.15"
+gem "concurrent-ruby", "< 1.3.5"

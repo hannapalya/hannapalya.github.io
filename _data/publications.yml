@@ -1,0 +1,28 @@
+# In display order, newest year first. The home page shows each title, linked to its `url` (the DOI,
+# or the address of a post), then the year in brackets, and nothing else (no summary); check_site.py
+# fails if an entry lacks one of those or has a `summary`. `authors` and `venue` are not shown.
+- title: What is the gap between closed-weight and open-weight general-purpose AI models in biological capabilities?
+  authors: Pálya H
+  venue: Credible Threats (Substack)
+  year: 2026
+  url: https://crediblethreats.substack.com/p/what-is-the-gap-between-closed-weight
+- title: "ADAPT: a programme for the advanced detection of AI-enabled pathogenic threats"
+  authors: Pálya H, Nelson C
+  venue: Frontiers in Bioengineering and Biotechnology
+  year: 2026
+  url: https://doi.org/10.3389/fbioe.2026.1819372
+- title: Evaluating AI-assisted customer verification for synthetic nucleic acid screening
+  authors: Acelas A, Pálya H, Flyangolts K, Fady P-E, Nelson C
+  venue: Frontiers in Bioengineering and Biotechnology
+  year: 2026
+  url: https://doi.org/10.3389/fbioe.2026.1819556
+- title: "A metagenomic biosurveillance network for emerging infectious diseases: a simulation-based model"
+  authors: Meusel I, Manheim D, Delaney O, Greene D, Tobolsky R, Pálya H, Shapiro N, Sharma S
+  venue: Health Security
+  year: 2026
+  url: https://doi.org/10.1177/23265094261453732
+- title: Deploying digital detection of dangerous DNA
+  authors: Pálya H, Delaney O
+  venue: Journal of Science Policy & Governance
+  year: 2023
+  url: https://doi.org/10.38126/JSPG210306

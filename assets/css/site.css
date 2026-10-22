@@ -1,0 +1,400 @@
+/* ==========================================================================
+   hannapalya.com: the whole stylesheet.
+   The page is a night sky; a large lit jellyfish hangs in it and its tentacles
+   become the section rules (drawn by trails.js), then fade out in the sky toward the foot of the
+   page. The jellyfish is moonlight: moon-white lines with a soft glow, four pearl-white gonads and a
+   faint halo in the sky behind its bell. There is no red.
+   The type is as plain as the sky: one family, Quicksand, whose thin round-ended strokes match the
+   hand-drawn stars. The name is set light and large; everything else is one weight at one size.
+   There is one theme. Colours are tokens on :root; token names stay neutral.
+   ========================================================================== */
+:root {
+  --paper: #05080B; --sky-top: #0D2236; --sky-mid: #091827; --sky-low: #060D14;
+  --ink: #E6E0D3; --muted: #93A1AC; --rule: rgb(230 224 211 / .16);
+  --star: #FFFAF0;   /* the specks' colours are in build_illustrations.py's speck tile */
+  --jelly-pale: #F4F3EC; --jelly: #DCDFD8; --jelly-mid: #9AA4A6;
+  --jelly-gonad: #FFFFFF; --jelly-gonad-fill: rgb(255 255 255 / .22);   /* read by medusa.py's .j-gonad and .j-dots rules */
+  --glow: rgb(236 238 230 / .42);
+  --trail: var(--jelly-mid);
+  --focus: var(--jelly-pale); --select: #2B3A44;
+  /* the moon halo: 30rem x 24rem behind the bell (82% 9rem at 1440px); it follows the jellyfish below */
+  --halo: 30rem 24rem at calc(var(--wl) + 62.8rem) 9rem; --halo-c: rgb(220 228 230 / .10);
+  --page-bg: radial-gradient(var(--halo), var(--halo-c), transparent 70%) no-repeat,
+             radial-gradient(64rem 44rem at 84% 6rem, rgb(24 62 88 / .32), transparent 70%) no-repeat,
+             linear-gradient(180deg, var(--sky-top) 0, var(--sky-mid) 800px, var(--sky-low) 1700px, var(--paper) 2500px) no-repeat,
+             var(--paper);
+  --link: #DCE6E8; --link-line: rgb(220 230 232 / .4); --link-hover: var(--jelly-pale); --link-glow: 0 0 8px var(--glow);
+  --trail-o: .95; --trail-glow: drop-shadow(0 0 3px var(--glow)); --sec-rule: var(--jelly-mid);
+
+  --font: "Quicksand", system-ui, sans-serif;
+
+  --gutter: clamp(1rem, 4.5vw, 4rem);
+  /* left edge of the text column, wherever 100% is the page's width */
+  --wl: calc(max(0px, (100% - 76rem) / 2) + var(--gutter));
+  --col: 50rem;               /* the text column: label column, gap and measure */
+  color-scheme: dark;
+}
+/* the halo belongs to the jellyfish in the sky: pages without it (the subpages) have none */
+:root:not(:has(.jelly-plate)) { --halo-c: transparent; }
+
+/* ---------- base ---------- */
+*, *::before, *::after { box-sizing: border-box; }
+html { -webkit-text-size-adjust: 100%; text-size-adjust: 100%; background: var(--page-bg); }
+body {
+  margin: 0;
+  color: var(--ink);
+  font: 400 1.125rem/1.6 var(--font);
+  font-kerning: normal; font-synthesis: none;
+  -webkit-font-smoothing: antialiased; text-rendering: optimizeLegibility;
+}
+/* grain over the whole page; the noise tile (background-image) comes from the generated illustrations.css */
+body::before {
+  content: ""; position: fixed; inset: 0; z-index: 50; pointer-events: none; opacity: .045;
+  background-position: 0 0; background-size: 180px;
+}
+::selection { background: var(--select); color: var(--ink); }
+a {
+  color: var(--link); text-decoration: underline 1px var(--link-line); text-underline-offset: .2em;
+  text-decoration-skip-ink: auto; transition: color .15s, text-decoration-color .15s, text-shadow .15s;
+}
+a:hover { color: var(--link-hover); text-decoration-color: currentColor; text-shadow: var(--link-glow); }
+:focus-visible { outline: 2px solid var(--focus); outline-offset: 2px; border-radius: 1px; }
+.skip { position: absolute; left: var(--gutter); top: -3rem; z-index: 40; padding: .4rem .7rem; background: var(--paper); }
+.skip:focus { top: .5rem; }
+/* one size and one weight: headings are told apart by place and colour, not by type */
+h1, h2, h3 { margin: 0; font: inherit; text-wrap: balance; }
+p { text-wrap: pretty; hanging-punctuation: first; }
+
+/* at least a window tall, so a short page still fills the window with sky */
+.page { position: relative; overflow: hidden; display: flex; flex-direction: column; min-height: 100vh; }
+main { position: relative; flex: 1 0 auto; }
+.subpage main { padding-bottom: clamp(3rem, 6vw, 5rem); }
+.wrap { position: relative; z-index: 1; max-width: 76rem; margin: 0 auto; padding: 0 var(--gutter); }
+
+/* subpages: the name, small, top left, back to the home page (which has no header) */
+.head { width: 100%; padding-top: 1.75rem; }
+.home { color: var(--ink); text-decoration-color: transparent; }
+
+/* ---------- the illustration, on the page ---------- */
+/* Starts 2.5rem right of the 50rem text column and is sized to the margin that is left, so it
+   bleeds off the right edge until the window is wide enough to hold the whole drawing. The jellyfish's
+   link (.jelly-spot, .jelly-box: see "the jellyfish's link" below) shares the plate's and the drawing's
+   place and size, here and under "responsive". */
+:is(.plate, .jelly-spot) {
+  --x: calc(var(--wl) + 52.5rem);
+  position: absolute; z-index: 0; pointer-events: none;
+  top: 2.4rem; left: var(--x); width: clamp(24rem, 100% - var(--x) + 2rem, 34rem);
+}
+:is(.jelly-plate .jelly, .jelly-spot .jelly-box) { position: relative; width: min(27rem, 100% - 1rem); margin: 1.4rem 0 0 -2.4rem; --js: 1; --jd: 1; }
+@media (max-resolution: 1.49dppx) { .jelly { --jd: 1.3; } }
+.jelly .float { position: relative; }
+.jelly .jl { display: block; width: 100%; height: auto; overflow: visible; }
+.jelly .jl-back, .jelly .jl-arms, .jelly .jl-front { position: absolute; inset: 0; height: 100%; }
+.jelly .jl-bell { position: relative; }
+
+/* night sky: hand-drawn stars in the upper page, none below the first section. The star links (below)
+   share the places of the stars in clear sky (s1, s2, s5, s6, s7 and the phone stars), and which of
+   them show at each width. */
+.sky { position: absolute; inset: 0 0 auto; height: 60rem; pointer-events: none; z-index: 0; }
+.sky .star { position: absolute; width: 14px; height: 14px; overflow: visible; fill: none; stroke: var(--star); stroke-width: 1px; stroke-linecap: round; opacity: .9; }
+.star-dot { stroke-width: 2.2px; }
+:is(.sky, .star-links) .s1 { left: calc(var(--wl) + 31rem); top: 2.6rem; }
+:is(.sky, .star-links) .s2 { left: calc(var(--wl) + 44.5rem); top: 9.5rem; }
+.sky .s3 { left: calc(var(--wl) + 40.5rem); top: 23rem; opacity: .75; }
+.sky .s4 { left: calc(var(--wl) + 46.5rem); top: 35rem; }
+:is(.sky, .star-links) .s5 { right: 2.75rem; top: 1.4rem; }
+:is(.sky, .star-links) .s6 { left: calc(var(--wl) - 3rem); top: 15.5rem; }
+:is(.sky, .star-links) .s7 { left: calc(var(--wl) + 17rem); top: .9rem; }
+.sky .s7 { opacity: .7; }
+.sky .s8 { right: 1.75rem; top: 37rem; opacity: .8; }
+@media (max-width: 87.499em) { :is(.sky, .star-links) .s6 { display: none; } }
+.sky .m1, .sky .m2, .sky .m3, .sky .m4 { display: none; }
+/* specks: a seeded 512px tile in the upper sky (background-image from the generated illustrations.css),
+   thinning out further down and dimmed behind the text column so no speck can pass for a full stop */
+.sky::before {
+  content: ""; position: absolute; inset: 0; background-position: 0 0; background-size: 512px;
+  --l: var(--wl);
+  -webkit-mask-image: linear-gradient(#000 40%, transparent), linear-gradient(90deg, #000 calc(var(--l) - 3rem), rgb(0 0 0 / .14) var(--l), rgb(0 0 0 / .14) calc(var(--l) + 48rem), #000 calc(var(--l) + 52rem));
+  -webkit-mask-composite: source-in;
+  mask-image: linear-gradient(#000 40%, transparent), linear-gradient(90deg, #000 calc(var(--l) - 3rem), rgb(0 0 0 / .14) var(--l), rgb(0 0 0 / .14) calc(var(--l) + 48rem), #000 calc(var(--l) + 52rem));
+  mask-composite: intersect;
+}
+
+/* stars that lead somewhere: the links of _data/stars.yml (_includes/star-links.html), after <main>
+   (last in tab order) and outside the aria-hidden sky. Each is an invisible 28px circle over its star,
+   the only part of the sky that takes the pointer. On hover or focus the star brightens and the label
+   fades in beside it, on the side with more room: to the right unless a rule here or under
+   "responsive" says otherwise. The label's padding keeps the text clear of the focus ring and leaves
+   no gap between it and the circle, so the pointer can move onto the label. */
+.star-links { position: absolute; inset: 0 0 auto; z-index: 2; pointer-events: none; }
+.star-links .star-link {
+  position: absolute; width: 14px; height: 14px; box-sizing: content-box; padding: 7px; margin: -7px;
+  border-radius: 50%; color: var(--ink); text-decoration: none; text-shadow: none; pointer-events: auto;
+}
+.star-label, .jelly-label {
+  position: absolute; left: 100%; top: 50%; translate: 0 -50%; padding: .25rem .375rem;
+  white-space: nowrap; line-height: 1.3; opacity: 0; pointer-events: none;
+}
+.star-link:is(:hover, :focus-visible) .star-label, .jelly-link:is(:hover, :focus-visible) .jelly-label { opacity: 1; pointer-events: auto; }
+.star-link:is(.s2, .s5) .star-label { left: auto; right: 100%; }
+/* s6 is 3rem left of the text: its label hangs under it, ending at its right edge, where it has
+   about 28px more room than on its left */
+.star-link.s6 .star-label { left: auto; right: 1px; top: 100%; translate: none; }
+.page:has(.star-link.s1:is(:hover, :focus-visible)) .sky .s1, .page:has(.star-link.s2:is(:hover, :focus-visible)) .sky .s2,
+.page:has(.star-link.s5:is(:hover, :focus-visible)) .sky .s5, .page:has(.star-link.s6:is(:hover, :focus-visible)) .sky .s6,
+.page:has(.star-link.s7:is(:hover, :focus-visible)) .sky .s7,
+.page:has(.star-link.m1:is(:hover, :focus-visible)) .sky .m1, .page:has(.star-link.m2:is(:hover, :focus-visible)) .sky .m2,
+.page:has(.star-link.m3:is(:hover, :focus-visible)) .sky .m3, .page:has(.star-link.m4:is(:hover, :focus-visible)) .sky .m4 {
+  opacity: 1; filter: drop-shadow(0 0 3px rgb(236 238 230 / .6));
+}
+/* the jellyfish's link (_includes/jelly-link.html), after <main> and outside the aria-hidden plate, like
+   the star links. On the home page .jelly-spot and .jelly-box take the plate's and the drawing's place
+   and size (the rules are shared, above and under "responsive"); on the 404 page .jelly-frame holds
+   the figure. The link covers the drawing but takes the pointer only over the bell (::before, an
+   ellipse) and the oral arms under it (::after), so the tentacles, the trails and the sky never lead
+   anywhere. On hover or focus the bell's glow brightens, the focus ring goes round the bell, and the
+   label fades in beside the bell in clear sky: by default left of the dome and above the fringe, its
+   right end 18% and its foot 16% of the way into the drawing (see "responsive" for narrower screens). */
+.jelly-spot { z-index: 2; }
+.jelly-spot .jelly-box { aspect-ratio: 603 / 589; }   /* the drawing's viewBox */
+.jelly-link { position: absolute; inset: 0; pointer-events: none; text-decoration: none; }
+.jelly-link::before, .jelly-link::after { content: ""; position: absolute; pointer-events: auto; }
+.jelly-link::before { left: 16.5%; top: 3%; width: 78%; height: 48%; border-radius: 50%; }
+.jelly-link::after { left: 40%; top: 45%; width: 24%; height: 33%; border-radius: 50% / 20%; }
+.jelly-link:focus-visible { outline: none; }
+.jelly-link:focus-visible::before { outline: 2px solid var(--focus); outline-offset: 2px; }
+.jelly-label { color: var(--ink); text-shadow: none; }
+.jelly-box .jelly-label { left: auto; right: 82%; top: auto; bottom: 84%; translate: none; }
+/* on the 404 page the jellyfish is small and under the text: the label goes just right of the drawing,
+   level with the rim, or on narrow screens over the dome, in the gap between the text and the drawing */
+.jelly-frame .jelly-label { left: 100%; top: 27%; translate: 0 -50%; }
+@media (max-width: 30em) { .jelly-frame .jelly-label { left: 55.5%; top: auto; bottom: 100%; translate: -50% 0; } }
+.page:has(.jelly-link:is(:hover, :focus-visible)) .jl-bell .bell {
+  filter: drop-shadow(0 0 9px rgb(236 238 230 / .6)) drop-shadow(0 0 22px rgb(236 238 230 / .6));
+}
+@media (prefers-reduced-motion: no-preference) {
+  .star-label, .sky .star, .jelly-label { transition: opacity .3s ease-out, filter .3s ease-out; }
+  .jl-bell .bell { transition: filter .3s ease-out; }
+}
+
+/* ---------- the name and the intro ---------- */
+.hero { padding-top: clamp(5.5rem, 10vw, 9.5rem); padding-bottom: clamp(3.5rem, 6vw, 5rem); }
+.title { max-width: var(--col); }
+.name { font-weight: 300; font-size: clamp(2.75rem, 2rem + 3vw, 4rem); line-height: 1.1; letter-spacing: -.005em; }
+.lede-col { max-width: 34rem; margin-top: clamp(1.25rem, 2.5vw, 2rem); }
+.lede-col p { margin: 0; }
+.lede-col p + p { margin-top: 1.25rem; }
+/* the contact links, one line under the intro (the address may break where it has to, at large text sizes) */
+.lede-col .links { margin-top: 1.25rem; overflow-wrap: anywhere; }
+
+/* ---------- sections: a label column and a text column, under a rule ---------- */
+/* the page ends after the last section, with sky below it */
+.parts { padding-bottom: 4rem; }
+.sec, .leaf { display: grid; grid-template-columns: 9.5rem minmax(0, 1fr); column-gap: 2.5rem; max-width: var(--col); }
+.sec, .leaf { padding: 3.75rem 0 3.5rem; border-top: 1px solid var(--sec-rule); }
+.label { color: var(--muted); }
+.label a { color: inherit; }
+.body { min-width: 0; max-width: 35rem; margin: 0; }
+.body p { margin: 0; }
+.list { list-style: none; margin: 0; padding: 0; }
+.list li + li { margin-top: .6rem; }
+.sep, .muted { color: var(--muted); }
+
+/* ---------- jellyfish ---------- */
+/* The next block is medusa.py's layers.css, copied as it is: build_illustrations.py stops if these
+   lines are not here as written. Change the widths in medusa.py and paste them here; the night
+   colours after the block override its stroke colour. */
+.jl path{fill:none;stroke:var(--jelly);stroke-linecap:round;stroke-linejoin:round}
+.jl-back path,.jl-front path{stroke-linecap:butt}
+.jl .j-edge{stroke-width:calc(1.15px * var(--jk, 1) * var(--js, 1) * var(--jd, 1))}
+.jl .j-back{stroke-width:calc(.6px * var(--jk, 1) * var(--js, 1) * var(--jd, 1));opacity:.3}
+.jl .j-canal0{stroke-width:calc(1.05px * var(--jk, 1) * var(--js, 1) * var(--jd, 1));opacity:.92}
+.jl .j-canal1{stroke-width:calc(.85px * var(--jk, 1) * var(--js, 1) * var(--jd, 1));opacity:.82}
+.jl .j-canal2{stroke-width:calc(.68px * var(--jk, 1) * var(--js, 1) * var(--jd, 1));opacity:.75}
+.jl .j-canal3{stroke-width:calc(.55px * var(--jk, 1) * var(--js, 1) * var(--jd, 1));opacity:.68}
+.jl .j-canal4{stroke-width:calc(.45px * var(--jk, 1) * var(--js, 1) * var(--jd, 1));opacity:.6}
+.jl .j-gonad{stroke:var(--jelly-gonad);stroke-width:calc(.95px * var(--jk, 1) * var(--js, 1) * var(--jd, 1));fill:var(--jelly-gonad-fill)}
+.jl .j-dots{stroke:var(--jelly-gonad);stroke-width:calc(1.9px * var(--jk, 1) * var(--js, 1) * var(--jd, 1));opacity:.9}
+.jl .j-rho{fill:var(--jelly);stroke:none}
+.jl .j-rhob{fill:var(--jelly);stroke:none;opacity:.35}
+.jl .j-frill{stroke-width:calc(.75px * var(--jk, 1) * var(--js, 1) * var(--jd, 1));opacity:.9}
+.jl .j-drape{stroke-width:calc(.5px * var(--jk, 1) * var(--js, 1) * var(--jd, 1));opacity:.5}
+.jl .j-frill-in{stroke-width:calc(.5px * var(--jk, 1) * var(--js, 1) * var(--jd, 1));opacity:.2}
+.jl .j-frill2{stroke-width:calc(.45px * var(--jk, 1) * var(--js, 1) * var(--jd, 1));opacity:.55}
+.jl .j-tf0{stroke-width:calc(.85px * var(--jk, 1) * var(--js, 1) * var(--jd, 1));opacity:.78}
+.jl .j-tf1{stroke-width:calc(.7px * var(--jk, 1) * var(--js, 1) * var(--jd, 1));opacity:.66}
+.jl .j-tf2{stroke-width:calc(.56px * var(--jk, 1) * var(--js, 1) * var(--jd, 1));opacity:.55}
+.jl .j-tf3{stroke-width:calc(.36px * var(--jk, 1) * var(--js, 1) * var(--jd, 1));opacity:.36}
+.jl .j-tb0{stroke-width:calc(.8px * var(--jk, 1) * var(--js, 1) * var(--jd, 1));opacity:.55}
+.jl .j-tb1{stroke-width:calc(.62px * var(--jk, 1) * var(--js, 1) * var(--jd, 1));opacity:.42}
+.jl .j-tb2{stroke-width:calc(.46px * var(--jk, 1) * var(--js, 1) * var(--jd, 1));opacity:.3}
+.jl .j-tb3{stroke-width:calc(.32px * var(--jk, 1) * var(--js, 1) * var(--jd, 1));opacity:.2}
+.jl path { stroke: var(--jelly-pale); }
+.jl-back path, .jl-front path { stroke: var(--jelly); }
+.jl-arms path { stroke: var(--jelly); }
+.jl-back, .jl-front, .jl-arms { filter: drop-shadow(0 0 2.4px var(--glow)); }
+.jl-bell .bell { filter: drop-shadow(0 0 9px var(--glow)) drop-shadow(0 0 22px var(--glow)); }
+/* the gonads take their pearl white from --jelly-gonad and --jelly-gonad-fill */
+.jl-bell .gonads { filter: drop-shadow(0 0 4px rgb(255 255 255 / .85)) drop-shadow(0 0 12px rgb(230 236 240 / .55)); }
+.jelly .float, .jl-back, .jl-front, .jl-arms, .breath { transform-box: fill-box; }
+@media (prefers-reduced-motion: no-preference) {
+  /* all motion stays within ~6px: drift 5px, sway at the tips, a slow breath of the bell's glow */
+  .jelly .float { animation: drift 10s ease-in-out infinite; }
+  .jelly .jl-back  { transform-origin: 50% 30%; animation: sway 8s ease-in-out infinite; }
+  .jelly .jl-front { transform-origin: 50% 44%; animation: sway 8s ease-in-out -1.6s infinite; }
+  .jelly .jl-arms  { transform-origin: 50% 32%; animation: sway-arms 11s ease-in-out -3s infinite; }
+  .breath { animation: breath 7s ease-in-out infinite; }
+  @keyframes drift { 0%, 100% { transform: translateY(2px); } 50% { transform: translateY(-3px); } }
+  @keyframes sway { 0%, 100% { transform: skewX(-.45deg); } 50% { transform: skewX(.45deg); } }
+  @keyframes sway-arms { 0%, 100% { transform: skewX(.45deg); } 50% { transform: skewX(-.5deg); } }
+  @keyframes breath { 0%, 100% { opacity: .82; } 50% { opacity: 1; } }
+}
+
+/* ---------- subpages ---------- */
+.leaf { margin-top: clamp(2.5rem, 6vw, 4.5rem); }
+.muted + .prose { margin-top: 1.5rem; }
+.prose > :first-child { margin-top: 0; }
+/* the page clips sideways overflow, so a long URL or word must wrap and a wide table or code block scrolls */
+.prose { overflow-wrap: anywhere; }
+.prose p, .prose ul, .prose ol, .prose blockquote, .prose pre { margin: 0 0 1.1rem; }
+.prose h2, .prose h3 { margin: 2.5rem 0 .6rem; color: var(--muted); }
+.prose blockquote { padding-left: 1.1rem; border-left: 1px solid var(--rule); color: var(--muted); }
+.prose pre { overflow-x: auto; overflow-wrap: normal; padding-left: 1.1rem; border-left: 1px solid var(--rule); }
+.prose table { display: block; overflow-x: auto; border-collapse: collapse; margin: 0 0 1.1rem; }
+.prose th, .prose td { padding: .2rem 1.25rem .2rem 0; text-align: left; vertical-align: top; font-weight: inherit; overflow-wrap: normal; }
+.prose img { max-width: 100%; height: auto; }
+/* posts keep the one face, weight and size: emphasis is lit, brighter and with a soft glow (no italic,
+   no bold), headings are told apart by colour and space, and code is set in Quicksand too (no monospace) */
+.prose em, .prose i, .prose strong, .prose b { font-style: normal; font-weight: inherit; color: var(--jelly-gonad); text-shadow: 0 0 7px var(--glow); }
+.prose code, .prose kbd, .prose samp, .prose pre { font: inherit; }
+.gallery { list-style: none; margin: 2rem 0 0; padding: 0; display: grid; grid-template-columns: repeat(auto-fill, minmax(min(10rem, 100%), 1fr)); gap: 2rem 1.5rem; }
+.gallery figure { margin: 0; }
+.gallery img { display: block; width: 100%; height: auto; aspect-ratio: 3 / 4; object-fit: contain; }
+.gallery figcaption { margin-top: .5rem; color: var(--muted); }
+.leaf .jelly-frame { position: relative; width: min(16rem, 100%); margin: 2.5rem 0 0; }
+.leaf .jelly { margin: 0; }
+
+/* ---------- responsive ---------- */
+/* The breakpoints are in em (16px at the browser's default text size: 77.5em is 1240px), so a
+   larger default text size moves the layout to the narrower arrangement it fits, and the text
+   never runs under the jellyfish. trails.js uses the same phone breakpoint, 47.5em. */
+@media (max-width: 77.5em) {
+  :is(.plate, .jelly-spot) { left: auto; }
+  /* From here down the jellyfish hangs from the right edge: --jr is its gap to that edge, --jw its
+     width and --jt the top of its drawing (the plate's top plus the jellyfish's top margin). The
+     halo follows it, sized to it as at 1440px (30rem x 24rem around a 27rem jellyfish). */
+  :root { --col: calc(100% - clamp(20rem, 34vw, 26rem) + 1rem);
+          --jr: .5rem; --jw: clamp(19rem, 32vw, 25rem); --jt: 3.8rem;
+          --halo: calc(1.11 * var(--jw)) calc(.89 * var(--jw)) at calc(100% - var(--jr) - .53 * var(--jw)) calc(var(--jt) + .19 * var(--jw)); }
+  :is(.jelly-plate, .jelly-spot) { right: var(--jr); width: var(--jw); }
+  :is(.jelly-plate .jelly, .jelly-spot .jelly-box) { width: 100%; margin: 1.4rem 0 0; }
+  :is(.sky, .star-links) .s2 { left: auto; right: calc(clamp(20rem, 34vw, 26rem) + 1rem); }
+  .sky .s4 { left: auto; right: calc(clamp(20rem, 34vw, 26rem) - 1rem); top: 37rem; }
+}
+@media (max-width: 65em) {
+  /* The jellyfish sits whole at the top right, beside the name and the intro (which narrow to make
+     room). --jw is the jellyfish's width; the text keeps clear of its outermost tentacles (11% in). */
+  :root { --col: 46rem; --jw: clamp(13rem, 100vw - 2 * var(--gutter) - 30rem, 22rem); --jr: calc(var(--gutter) * .5); --jt: 1.85rem;
+          --tx: min(36rem, 100vw - 1.5 * var(--gutter) - .89 * var(--jw) - 1rem); }
+  .title, .lede-col { max-width: var(--tx); }
+  :is(.plate, .jelly-spot) { top: 1.25rem; }
+  :is(.jelly-plate .jelly, .jelly-spot .jelly-box) { width: 100%; margin: .6rem 0 0; }
+  :is(.sky, .star-links) .s2, .sky .s3, .sky .s4, .sky .s8 { display: none; }
+  /* the bell is now right of s1 and under s5: s1's label goes left, s5's a little higher */
+  .star-link.s1 .star-label { left: auto; right: 100%; }
+  .star-link.s5 .star-label { translate: 0 -85%; }
+  /* s1 is now at the drawing's top left corner: the jellyfish's label goes lower, left of the fringe */
+  .jelly-box .jelly-label { right: 95%; top: 20%; bottom: auto; }
+}
+@media (max-width: 63.999em) {
+  .sec, .leaf { grid-template-columns: minmax(0, 1fr); }
+  .label { margin-bottom: 1rem; }
+}
+@media (max-width: 47.5em) {
+  :root { --gutter: 1rem; --col: calc(100% - 10px); --jr: .25rem; --jw: min(15rem, 64vw); --jt: .75rem; }
+  body { font-size: 1.0625rem; }
+  /* the jellyfish stands at the top right with a band of clear page beside it,
+     and the name starts below it */
+  :is(.plate, .jelly-spot) { top: .5rem; }
+  :is(.jelly-plate .jelly, .jelly-spot .jelly-box) { margin: .25rem 0 0; }
+  .hero { padding-top: 14rem; padding-bottom: 3.5rem; }
+  .title { max-width: var(--col); }
+  /* at most 34rem, as on wide screens, but never under 750px, so at the default text size the
+     intro keeps the full width of a phone (the cap only acts when the text size is raised) */
+  .lede-col { max-width: min(100% - 10px, max(34rem, 750px)); }
+  .sec, .leaf { padding: 3rem 0; }
+  .sky { height: 15rem; }
+  .sky .star, .star-links .star-link { display: none; }
+  :is(.sky, .star-links) :is(.m1, .m2, .m3, .m4) { display: block; right: auto; }
+  :is(.sky, .star-links) .m1 { left: 6vw; top: 1.6rem; } :is(.sky, .star-links) .m2 { left: 24vw; top: 5.75rem; }
+  :is(.sky, .star-links) .m3 { left: 9vw; top: 10rem; } :is(.sky, .star-links) .m4 { left: 33vw; top: 1.9rem; }
+  /* the labels keep to the clear sky left of the jellyfish (--clear is its right edge: the outer 11% of
+     the jellyfish stays clear, as for the text) and wrap where it is narrow, inside a word only when
+     one word is too wide (at the largest text sizes): under m1 (m4 is beside it), right of m3 and
+     centred under m2. The text lines up with the star's edge.
+     m4's label wraps by word only. It hangs from the star's foot, so that two lines fit above m2, and
+     ends just left of the focus ring (2px outside the 28px circle), right-aligned in balanced lines.
+     Narrower screens: see the 24em and 19em blocks below. */
+  .star-links { --clear: calc(100vw - var(--jr) - .89 * var(--jw)); }
+  .star-link .star-label { white-space: normal; overflow-wrap: anywhere; width: max-content; }
+  .star-link.m1 .star-label { left: 1px; right: auto; top: 100%; translate: none; max-width: calc(var(--clear) - 6vw + 6px); }
+  .star-link.m2 .star-label { left: 50%; right: auto; top: 100%; translate: -50% 0; max-width: calc(2 * min(24vw + 3px, var(--clear) - 24vw - 7px)); }
+  .star-link.m3 .star-label { left: 100%; right: auto; top: 50%; translate: 0 -50%; max-width: calc(var(--clear) - 9vw - 21px); }
+  .star-link.m4 .star-label { left: auto; right: 100%; top: calc(100% - 7px - .25rem); translate: none; max-width: calc(33vw - 11px);
+                              overflow-wrap: normal; text-wrap: balance; text-align: right; }
+  /* the jellyfish's label: centred in the sky between m4's foot (1.9rem + 14px from the top) and m2's top
+     (5.75rem), which is 3.075rem + 7px below the drawing's top (.75rem), ending just left of the fringe,
+     and wrapping where the sky is narrow */
+  .jelly-box .jelly-label { right: 94%; top: calc(3.075rem + 7px); translate: 0 -50%; white-space: normal; width: max-content;
+                           max-width: calc(100vw - var(--jr) - .94 * var(--jw) - .5rem); text-align: right; }
+}
+@media (max-width: 24em) {
+  /* narrow phones: two lines do not fit left of m4, so m4's label runs on under the star, left-aligned,
+     from 6px off the left edge to .5rem short of --clear. Its first line still ends left of the focus
+     ring: the float (one line high) takes the room from 20px left of m4's centre (33vw + 7px; the ring's
+     outer radius is 18px) to the label's right edge. 33vw + 21px is the link's right edge. */
+  .star-link.m4 .star-label { right: calc(33vw + 21px - var(--clear) + .5rem); max-width: calc(var(--clear) - .125rem - 6px);
+                              text-wrap: wrap; text-align: left; }
+  .star-link.m4 .star-label::before { content: ""; float: right; width: calc(var(--clear) - .875rem - 33vw + 13px); height: 1px; }
+}
+@media (max-width: 19em) {
+  /* larger text on the narrowest phones only: short lines left of the ring, left-aligned, so the lines
+     beside m2 stay short (the label takes four or five lines here) */
+  .star-link.m4 .star-label { right: 100%; max-width: calc(33vw - 11px); }
+  .star-link.m4 .star-label::before { content: none; }
+}
+
+/* ---------- trails (drawn by trails.js): one SVG overlay under the text ---------- */
+.trails { position: absolute; left: 0; top: 0; z-index: 0; pointer-events: none; overflow: hidden; }
+.trails .glow { filter: var(--trail-glow); }
+.trails .rl { fill: none; stroke: var(--sec-rule); stroke-width: 1px; }
+.trails .a { stop-color: var(--trail); stop-opacity: var(--trail-o); }
+.trails .z { stop-color: var(--trail); stop-opacity: 0; }
+.trails .h { stop-color: var(--trail); stop-opacity: calc(var(--trail-o) * .42); }
+.has-trails .sec { border-top-color: transparent; }
+@media (prefers-reduced-motion: no-preference) {
+  .trails .grow { stroke-dasharray: 1 1; stroke-dashoffset: 1; animation: trail-draw var(--du, 1.2s) cubic-bezier(.3, .6, .3, 1) var(--dl, 0s) forwards; }
+  .trails .lin { animation-timing-function: linear; }
+  .trails .fade { opacity: 0; animation: trail-fade .9s ease-out var(--dl, 0s) forwards; }
+  @keyframes trail-draw { to { stroke-dashoffset: 0; } }
+  @keyframes trail-fade { to { opacity: 1; } }
+}
+
+/* ---------- preferences ---------- */
+@media (prefers-contrast: more) {
+  body::before, .sky::before { display: none !important; }
+  .jl-back, .jl-front, .jl-arms, .jl-bell .bell, .jl-bell .gonads, .trails .glow, .sky .star { filter: none !important; }
+  a:hover, .prose em, .prose i, .prose strong, .prose b { text-shadow: none !important; }
+  :root { --trail-glow: none; --link-glow: none; }
+}
+@media (forced-colors: active) {
+  .trails, .sky, body::before { display: none !important; }
+  .has-trails .sec { border-top-color: CanvasText; }
+}
+@media print {
+  /* on white paper the night's light ink would barely show, so print in dark ink */
+  :root { --ink: #1A1C1C; --muted: #52595A; --link: #1A1C1C; --link-line: rgb(26 28 28 / .38); }
+  .trails, .skip, .sky, body::before { display: none !important; }
+  html, body { background: #fff; }
+  .has-trails .sec { border-top-color: #999; }
+}

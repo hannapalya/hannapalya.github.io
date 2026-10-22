@@ -1,0 +1,19 @@
+{%- comment -%}
+  Stars that lead somewhere: one link per entry of _data/stars.yml, each over one of the sky's
+  hand-drawn stars (illustrations/sky.html). They come after <main>, so they are last in tab order,
+  and stay out of the sky, which is aria-hidden. Entry n takes the n-th star of `wide` on screens
+  wider than 47.5em and the n-th of `phone` below that; site.css places each link over its star
+  (it shares the stars' places), brightens the star on hover and focus, and puts the label beside it.
+  Only the stars in clear sky are used: s7, s1 and s5 show at every width above 47.5em, s2 only above
+  65em and s6 only from 87.5em. The other stars (s3, s4, s8) sit among the text and the tentacles,
+  where no label fits, so there are five at most.
+{%- endcomment -%}
+{%- assign wide = "s7 s1 s5 s2 s6" | split: " " -%}
+{%- assign phone = "m1 m3 m2 m4" | split: " " -%}
+{%- if site.data.stars.size > 0 -%}
+<div class="star-links">
+  {%- for star in site.data.stars limit: 5 %}
+  <a class="star-link {{ wide[forloop.index0] }}{% if phone[forloop.index0] %} {{ phone[forloop.index0] }}{% endif %}" href="{{ star.url | escape }}"><span class="star-label">{{ star.label | escape }}</span></a>
+  {%- endfor %}
+</div>
+{%- endif -%}

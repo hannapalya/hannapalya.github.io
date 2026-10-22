@@ -2,4 +2,10 @@ _site
 .sass-cache
 .jekyll-cache
 .jekyll-metadata
-vendor
+# gems installed into the repo: vendor/dev/ by scripts/dev/install.sh, or vendor/bundle/
+/vendor/
+.bundle/
+.DS_Store
+Gemfile.lock
+# the Ruby 2.6 gem set is pinned, so its lock file is kept
+!scripts/dev/Gemfile.lock
