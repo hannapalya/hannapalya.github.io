@@ -4,7 +4,7 @@ Personal site of Hanna Pálya, built with Jekyll and served by GitHub Pages from
 
 ## Updating content
 
-- **Intro:** edit `index.md`. It is two short paragraphs under the name: what you do now, then what you did before. If it changes your role, employer or city, see the table below. `check_site.py` also checks that the intro still says each phrase in its `MUST_SAY` list, so change that list when you rewrite the intro.
+- **Intro:** edit `index.md`. It is two short paragraphs under the name: what you do now, then what you did before. If it changes your role, employer or city, see the table below. `check_site.py` also checks that the intro still says each phrase in its `MUST_SAY` list and links each name in its `INTRO_LINKS` list (Fourth Eon Biosecurity and the Centre for Long-Term Resilience), so change those lists when you rewrite the intro.
 - **Writing (publications):** add an entry at the top of `_data/publications.yml` with `title`, `authors`, `venue`, `year` and `url`. The home page shows the title, linked to `url` (the DOI, or for a post its address), then the year in brackets, and nothing else: there are no summaries, so do not add a `summary`. List only published work.
 - **Other projects:** the line under "writing" on the home page, in the section labelled "other projects" (`id="projects"`). To add a project, add an entry to `_data/other_projects.yml` with a `label` (the link's text, a word or two) and a `url`. The links show on one line, in the file's order, separated by "·", with no descriptions. `check_site.py` expects exactly these links, so add the new one to its `OTHER_PROJECTS` list too. There is no projects page: `/projects/` (`projects.md`) redirects to this section.
 - **Stars that lead somewhere:** edit `_data/stars.yml`. Each entry, a `label` and a `url`, turns one of the stars in the sky on the home page into a secret link: it looks like the other stars until you hover over it or tab to it, when it brightens and shows its label. There are at most five, in priority order; the comment at the top of the file says which show at which screen widths.
@@ -29,7 +29,7 @@ These facts are written in more than one place, so change every one in the row. 
 | Name | `title:`, `author.name` and `social.name` in `_config.yml`, then run `python3 scripts/social_card.py`. |
 | Degree or university | `alumniOf` in `_includes/person.json-ld.html`. The pages themselves claim no degree, and `check_site.py` fails if one does. |
 
-The favicons are drawn from the jellyfish's bell, with no text, so a change of job, city or links does not touch them. Run `python3 scripts/favicons.py` only after changing the jellyfish (see "Regenerating the art").
+The favicons are a sparkle, with no text, so a change of job, city or links does not touch them. Run `python3 scripts/favicons.py` only after changing the colours `--star` and `--paper` (see "Regenerating the art").
 
 ## Previewing locally
 
@@ -72,7 +72,7 @@ The jellyfish is moonlight: moon-white lines with a soft glow, four pearl-white 
 | Stars | `_includes/illustrations/sky.html`: hand-drawn six-ray asterisks and dot-crosses, with a speckle tile behind them. The set changes at narrow widths. The secret links from `_data/stars.yml` are `_includes/star-links.html`, placed over up to five of the stars. |
 | Grain | A noise tile laid over the whole page by `body::before`. Its image is in `_includes/illustrations/illustrations.css`, which `_includes/head.html` inlines. |
 | Trails | `assets/js/trails.js` measures the page and draws every tentacle and section rule into one SVG overlay (`svg.trails`) under the text. |
-| Bell mark | `_includes/illustrations/jelly-mark.svg`, the small bell the favicons are drawn from. |
+| Icon | `assets/favicon/` and `/favicon.ico`: a four-pointed sparkle with a small one at its upper right (`SPARKLES` in `scripts/favicons.py`), in the star white on the night background. The small icons are fitted to whole pixels so they stay crisp at 16px, and the home-screen icons (180px and up) have a faint glow. |
 
 The sky, the jellyfish and the script belong to the home page, which has no header bar: the name is its heading. Without JavaScript the section rules are plain CSS hairlines (`border-top` on `.sec`). With it, `trails.js` hides those and draws each rule, as a curl where a tentacle can reach it and as a straight line where none can. Under `prefers-reduced-motion` everything appears without the draw-in animation. Subpages (Crochet, Writing, posts and the 404 page) share the night colours and the type, and have a small "Hanna Pálya" link to the home page at the top left. The 404 page shows the jellyfish; none of them loads a script.
 
@@ -87,8 +87,8 @@ Quicksand is a variable font (weights 300 to 700), self-hosted in `assets/fonts/
 The jellyfish, stars and textures are generated, and the outputs are committed. Every generator is deterministic, so re-running one gives identical files unless its code or numbers have changed.
 
 ```
-python3 scripts/build_illustrations.py   # jellyfish layers, mark, stars, grain and speck tiles
-python3 scripts/favicons.py              # favicons and web manifest, drawn from the bell mark
+python3 scripts/build_illustrations.py   # jellyfish layers, stars, grain and speck tiles
+python3 scripts/favicons.py              # the sparkle favicons and web manifest
 python3 scripts/social_card.py           # the 1200×630 share image (needs Google Chrome)
 ```
 

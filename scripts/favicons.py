@@ -1,21 +1,22 @@
 #!/usr/bin/env python3
-"""Draw the jellyfish-bell favicons with Pillow (no browser needed).
+"""Draw the sparkle favicons with Pillow (no browser needed).
 
   python3 scripts/favicons.py
 
-Draws the bell mark (_includes/illustrations/jelly-mark.svg, made by build_illustrations.py) in the
-jellyfish's moon white (--jelly in site.css) on the night page (--paper), with heavier lines so it
-holds up at 16px. Writes assets/favicon/: favicon.svg, favicon.ico (16/32/48), favicon-96x96.png,
+Draws a four-pointed sparkle with a small one at its upper right (SPARKLES), in star white (--star in
+site.css) on the night page (--paper). Each sparkle's four tips are joined by quadratic curves pulled
+in towards its centre (PULL); sparkle() is that shape, for the SVG and for the PNG and ICO renders.
+Icons of GLOW_FROM px and up get a faint glow; the tab sizes do not.
+Writes assets/favicon/: favicon.svg, favicon.ico (16/32/48), favicon-96x96.png,
 apple-touch-icon.png (180), web-app-manifest-192x192.png, web-app-manifest-512x512.png,
 site.webmanifest; and a copy of favicon.ico at the repo root, for browsers that ask for /favicon.ico.
 """
-import json, os, re, shutil
-from PIL import Image, ImageDraw
+import json, math, os, re, shutil
+from PIL import Image, ImageDraw, ImageFilter
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 ROOT = os.path.dirname(HERE)
 OUT = os.path.join(ROOT, "assets", "favicon")
-MARK = os.path.join(ROOT, "_includes", "illustrations", "jelly-mark.svg")
 
 
 def token(name):
@@ -27,77 +28,60 @@ def token(name):
     return m.group(1)
 
 
-NIGHT, JELLY = token("--paper"), token("--jelly")
-PAD = 0.12      # clear space around the mark, as a fraction of the icon
-WIDTH = {1.0: 0.07, 0.75: 0.052, 0.6: 0.045}  # stroke width as a fraction of a 32px icon, by path opacity
-NUM = re.compile(r"-?(?:\d+\.?\d*|\.\d+)")
+NIGHT, WHITE = token("--paper"), token("--star")
+GRID = 32       # SPARKLES are in pixels of the 32px icon, which is favicon.svg's viewBox
+# (centre x, centre y, tip radius): the main sparkle, a little left of and below the middle, and the
+# small one a third its size at its upper right. Centres on the middle of a pixel keep the 32px icon crisp.
+SPARKLES = ((15.5, 16.5, 11), (25.5, 6.5, 4))
+PULL = .25      # each side's control point is on a diagonal, PULL x the radius from the centre:
+                # 0 would make needle-thin arms, .5 a straight-sided diamond
+SS = 16         # supersampling for the PNGs
+GLOW_FROM, GLOW, GLOW_R = 180, .25, .03   # icons this size and up: a blurred copy of the sparkles under
+                                          # them, at GLOW opacity, blurred by GLOW_R x the size
 
 
-def mark_paths():
-    """The mark's paths as (opacity, points, closed), in its own 32-unit coordinates.
-    medusa.py writes each as an absolute M, then relative l, optionally closed with z."""
-    with open(MARK, encoding="utf-8") as fh:
-        svg = fh.read()
-    out = []
-    for op, d in re.findall(r'<path(?: opacity="([\d.]+)")? d="([^"]+)"', svg):
-        m = re.fullmatch(r"M([^lz]+)l([^z]+)(z?)", d)
-        if not m:
-            raise SystemExit(f"unexpected path data in {MARK}: {d[:40]}")
-        x, y = map(float, NUM.findall(m.group(1)))
-        rel = list(map(float, NUM.findall(m.group(2))))
-        pts = [(x, y)]
-        for dx, dy in zip(rel[::2], rel[1::2]):
-            x, y = x + dx, y + dy
-            pts.append((x, y))
-        out.append((float(op or 1), pts, bool(m.group(3))))
-    return out
+def sparkle(x, y, r):
+    """A sparkle centred on (x, y) with tips r away, as its four sides from the top tip clockwise:
+    (start tip, control point, end tip) of each quadratic curve."""
+    tips = [(x, y - r), (x + r, y), (x, y + r), (x - r, y)]
+    ctrl = [(x + sx * PULL * r, y + sy * PULL * r) for sx, sy in ((1, -1), (1, 1), (-1, 1), (-1, -1))]
+    return [(tips[i], ctrl[i], tips[(i + 1) % 4]) for i in range(4)]
 
 
-def frame(paths):
-    """A square box (x, y, side) around the mark, with PAD clear space on every side."""
-    xs = [x for _, pts, _ in paths for x, _ in pts]
-    ys = [y for _, pts, _ in paths for _, y in pts]
-    side = max(max(xs) - min(xs), max(ys) - min(ys)) / (1 - 2 * PAD)
-    cx, cy = (max(xs) + min(xs)) / 2, (max(ys) + min(ys)) / 2
-    return cx - side / 2, cy - side / 2, side
+def png(size):
+    """The icon at size px: SPARKLES scaled to it, each centre moved to the middle of its pixel and each
+    radius rounded to whole pixels, so the arms end in one crisp pixel at 16 and 32px; drawn SS times
+    larger and averaged down."""
+    k, S = size / GRID, size * SS
+    mask = Image.new("L", (S, S), 0)
+    draw = ImageDraw.Draw(mask)
+    for x, y, r in SPARKLES:
+        pts = []
+        for (x0, y0), (qx, qy), (x1, y1) in sparkle(math.floor(x * k) + .5, math.floor(y * k) + .5, round(r * k)):
+            for t in (i / 128 for i in range(128)):
+                pts.append((((1 - t) ** 2 * x0 + 2 * (1 - t) * t * qx + t * t * x1) * SS,
+                            ((1 - t) ** 2 * y0 + 2 * (1 - t) * t * qy + t * t * y1) * SS))
+        draw.polygon(pts, fill=255)
+    mask = mask.reduce(SS)
+    im, white = Image.new("RGB", (size, size), NIGHT), Image.new("RGB", (size, size), WHITE)
+    if size >= GLOW_FROM:
+        glow = mask.filter(ImageFilter.GaussianBlur(GLOW_R * size)).point(lambda v: round(v * GLOW))
+        im = Image.composite(white, im, glow)
+    return Image.composite(white, im, mask)
 
 
-def mix(op):
-    """The moon white at this opacity over the night (flattened, so overlapping lines do not darken)."""
-    a, b = (tuple(int(c[i:i + 2], 16) for i in (1, 3, 5)) for c in (NIGHT, JELLY))
-    return tuple(round(p + (q - p) * op) for p, q in zip(a, b))
-
-
-def png(size, ss=4):
-    """The icon at size px: lines are heavier, relative to the icon, the smaller it is."""
-    paths = mark_paths()
-    heft = (32 / size) ** .4
-    x0, y0, side = frame(paths)
-    S = size * ss
-    k = S / side
-    im = Image.new("RGB", (S, S), NIGHT)
-    dr = ImageDraw.Draw(im)
-    for op, pts, closed in sorted(paths, key=lambda p: p[0]):  # faint lines first, the outline on top
-        xy = [((x - x0) * k, (y - y0) * k) for x, y in pts + (pts[:1] if closed else [])]
-        w = max(1, round(WIDTH[op] * heft * S))
-        dr.line(xy, fill=mix(op), width=w, joint="curve")
-        for px, py in (xy[0], xy[-1]):  # round caps
-            dr.ellipse((px - w / 2, py - w / 2, px + w / 2, py + w / 2), fill=mix(op))
-    return im.resize((size, size), Image.LANCZOS)
+def path(x, y, r):
+    """sparkle(x, y, r) as SVG path data."""
+    sides = sparkle(x, y, r)
+    (x0, y0), _, _ = sides[0]
+    return f"M{x0:g} {y0:g}" + "".join(f"Q{qx:g} {qy:g} {x1:g} {y1:g}" for _, (qx, qy), (x1, y1) in sides) + "Z"
 
 
 def svg():
-    x0, y0, side = frame(mark_paths())
-    with open(MARK, encoding="utf-8") as fh:
-        ds = re.findall(r'<path(?: opacity="([\d.]+)")? d="([^"]+)"', fh.read())
-    lines = []
-    for op, d in ds:
-        attr = f' opacity="{op}"' if op else ""
-        lines.append(f'<path{attr} stroke-width="{WIDTH[float(op or 1)] * side:.2f}" d="{d}"/>')
-    lines = "".join(lines)
-    return (f'<svg xmlns="http://www.w3.org/2000/svg" viewBox="{x0:.2f} {y0:.2f} {side:.2f} {side:.2f}">'
-            f'<rect x="{x0:.2f}" y="{y0:.2f}" width="{side:.2f}" height="{side:.2f}" rx="{side * .2:.2f}" fill="{NIGHT}"/>'
-            f'<g fill="none" stroke="{JELLY}" stroke-linecap="round" stroke-linejoin="round">{lines}</g></svg>\n')
+    """The sparkles in the 32px icon's coordinates, on a rounded square of night."""
+    paths = "".join(f'<path fill="{WHITE}" d="{path(*s)}"/>' for s in SPARKLES)
+    return (f'<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 {GRID} {GRID}">'
+            f'<rect width="{GRID}" height="{GRID}" rx="{GRID * .2:g}" fill="{NIGHT}"/>{paths}</svg>\n')
 
 
 def main():

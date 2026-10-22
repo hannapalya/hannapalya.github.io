@@ -9,7 +9,6 @@ drawing, so re-running it gives the same files:
   jelly-{back,bell,arms,front}.svg  the moon jellyfish from scripts/medusa.py, in four layers. The
                                     bell layer holds the gonads in their own group, so CSS can
                                     colour them (pearl white) and give them their own glow.
-  jelly-mark.svg                    the small bell mark (medusa.py); favicons.py draws the favicons from it.
   sky.html                          hand-drawn stars: 6-ray asterisks and dot-crosses.
   illustrations.css                 the speck and grain tiles, as data URIs.
 
@@ -34,7 +33,7 @@ def f(v, d=1):
 
 # ----------------------------------------------------------------------------- the jellyfish
 def run_medusa():
-    """Run medusa.py in a temp dir; return its layer SVGs, mark.svg and layers.css."""
+    """Run medusa.py in a temp dir; return its layer SVGs and layers.css."""
     with tempfile.TemporaryDirectory() as tmp:
         shutil.copy(os.path.join(HERE, "medusa.py"), tmp)
         subprocess.run([sys.executable, os.path.join(tmp, "medusa.py")], cwd=tmp, check=True,
@@ -44,7 +43,7 @@ def run_medusa():
             with open(os.path.join(tmp, name), encoding="utf-8") as fh:
                 return fh.read().strip()
         layers = {k: read(f"layer-{k}.svg") for k in ("back", "bell", "arms", "front")}
-        return layers, read("mark.svg"), read("layers.css")
+        return layers, read("layers.css")
 
 
 def jelly_layer(svg):
@@ -148,10 +147,9 @@ def build_textures():
 
 
 def main():
-    layers, mark, layers_css = run_medusa()
+    layers, layers_css = run_medusa()
     check_layer_css(layers_css)
     files = build_jelly(layers)
-    files["jelly-mark.svg"] = mark
     files["sky.html"] = build_sky()
     files["illustrations.css"] = build_textures()
     os.makedirs(OUT, exist_ok=True)

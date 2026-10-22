@@ -15,7 +15,6 @@ Draws a moon jellyfish (Aurelia aurita) in fine hairlines as SVG:
 
 Outputs (into OUT_DIR):
   layer-back.svg, layer-bell.svg, layer-arms.svg, layer-front.svg  -- the four stacked layers
-  mark.svg     -- tiny bell glyph (the source of the favicons)
   layers.css   -- stroke widths / opacities per class (kept in assets/css/site.css)
 
 Colours are never baked into the layers: paths carry classes (j-*) and assets/css/site.css
@@ -466,34 +465,6 @@ for k, body in layers.items():
     print(f'layer-{k}.svg  {len(s)/1024:.1f} KB')
 print(f'hero total {total/1024:.1f} KB; viewBox', VBS)
 
-
-# ---------------------------------------------------------- small echoes ---
-def mark_svg():
-    """Header glyph: the same bell, simplified -- outline, three canals, a short fringe."""
-    s, cx, cy = 12.5, 16.0, 12.5
-    sc = lambda X, Y: list(zip((np.asarray(X) - CX) / S * s + cx, (np.asarray(Y) - CY) / S * s + cy))
-    out = []
-    th_ = np.linspace(0, -math.pi, 60)
-    outline = sc(CX + S * SIL_X[::8], SIL_TOP[::8]) + sc(*proj(np.cos(th_), np.sin(th_), 0 * th_))
-    out.append(f'<path d="{poly_d(outline, 0.04, True)}"/>')
-    for a_ in (-2.25, -1.57, -0.89):
-        r_ = np.linspace(0.1, 0.95, 14)
-        out.append(f'<path opacity=".6" d="{poly_d(sc(*on_dome(r_, np.full_like(r_, a_))), 0.04)}"/>')
-    for i_, a_ in enumerate(np.linspace(-2.75, -0.39, 6)):
-        x0_, y0_ = proj(math.cos(a_), math.sin(a_), 0)
-        (x0_, y0_), = sc([x0_], [y0_])
-        tt = np.linspace(0, 1, 12)
-        L_ = 8.5 if i_ in (1, 4) else 6.5
-        tp = [(x0_ + 1.0 * math.sin(3.2 * t_ + i_) * t_ - 1.4 * t_ ** 2, y0_ + L_ * t_) for t_ in tt]
-        out.append(f'<path opacity=".75" d="{poly_d(tp, 0.04)}"/>')
-    return ('<svg class="mark" viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false">'
-            '<g fill="none" stroke="currentColor" stroke-width="1.1" stroke-linecap="round" stroke-linejoin="round">'
-            + ''.join(out) + '</g></svg>')
-
-
-MARK = mark_svg()
-open(os.path.join(OUT_DIR, 'mark.svg'), 'w').write(MARK)
-print(f'mark {len(MARK)} B')
 
 # ------------------------------------------------- per-class line styling ---
 LAYER_CSS = """

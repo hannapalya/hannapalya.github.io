@@ -14,10 +14,11 @@ They check that each entry is shown whole and that the places that repeat a fact
 tagline, the JSON-LD and the intro on role, employer and city; the links under the intro and the
 JSON-LD sameAs; the X link and the twitter: tags. Only the content rules are fixed (DEGREE,
 UNPUBLISHED, MUST_NOT_SAY_TEXT and the terms in the untracked .superpowers/must-not-say.txt), with
-the retired wording, the phrases the intro must say (MUST_SAY), the "other projects" line
-(OTHER_PROJECTS) and the Scholar link's text, "Google Scholar".
+the retired wording, the phrases the intro must say (MUST_SAY) and the names it must link
+(INTRO_LINKS), the "other projects" line (OTHER_PROJECTS) and the Scholar link's text,
+"Google Scholar".
 """
-import argparse, glob, gzip, html, html.parser, json, os, re, subprocess, sys
+import argparse, glob, gzip, html, html.parser, json, math, os, re, subprocess, sys
 import urllib.error, urllib.parse, urllib.request
 import xml.etree.ElementTree as ET
 
@@ -47,7 +48,12 @@ NOWHERE_SKIP = (".git", ".superpowers", os.path.join("docs", "superpowers"), "ve
 # the paragraph's other "I'm", so that is the character the sentence is matched with.
 MUST_SAY = ["threat modelling for AI-enabled biological risks", "I\u2019m based in London.", "Fourth Eon Biosecurity",
             "Centre for Long-Term Resilience", "on pause from a PhD", "Institute for Global Pandemic Planning",
-            "St Andrews", "I studied biology and philosophy at the University of St Andrews."]
+            "St Andrews", "I studied biology and philosophy at the University of St Andrews.",
+            "where I worked on early outbreak detection from symptom-based data."]
+# Links in the intro, as (the words linked, url): the organisations of the paragraph about before GovAI
+# (Addendum 26). The link is the name itself, so "the" in "the Centre for Long-Term Resilience" is not linked.
+INTRO_LINKS = [("Fourth Eon Biosecurity", "https://fourtheon.bio"),
+               ("Centre for Long-Term Resilience", "https://www.longtermresilience.org")]
 # The "other projects" section under writing (#projects): one line of these links, as (name, url), in
 # this order and with nothing else. Its content is _data/other_projects.yml; add a project to both.
 OTHER_PROJECTS = [("Cliver", "https://cliver.bio"),
@@ -74,7 +80,9 @@ MUST_NOT_SAY = ["Oxford", "Blog post 1", "minima", "PhD student", "Palya H", "Fu
                 "it would cost",
                 "A policy memo on making DNA synthesis screening standard practice in the US",
                 # the intro says "I'm based in London." (Addendum 22), not where she lives
-                "I live in London"]
+                "I live in London",
+                # the PhD clause is plainer (Addendum 26): "early outbreak detection from symptom-based data"
+                "detecting pandemics earlier from syndromic surveillance data"]
 # More terms to keep off the site are listed, one per line, in this untracked file. Without it the
 # check prints SKIP. Blank lines and lines starting with # are ignored. The terms before a line that
 # says [nowhere] must not appear on the site's own pages (PRIVATE; a WARN on a post); the terms after
@@ -581,6 +589,12 @@ def check_home(parsed):
     check("home: the intro gives the city in the JSON-LD homeLocation", bool(city) and city in intro, city)
     missing = [w for w in MUST_SAY if w not in intro]
     check("home: the intro says what she does and did (MUST_SAY)", not missing, ", ".join(missing))
+    # INTRO_LINKS: each name is a link of its own in the intro, to its site
+    lp = parse_html(lede.group(1)) if lede else None
+    in_intro = [(lp.name(a), html.unescape(a["attrs"].get("href", ""))) for a in lp.anchors] if lp else []
+    unlinked = [f"{name} -> {url}" for name, url in INTRO_LINKS if (name, url) not in in_intro]
+    check("home: the intro links each name in INTRO_LINKS to its site", not unlinked,
+          "; ".join(unlinked) + f" (the intro links {in_intro})")
     # there is no projects page to link to from the top of the page: /projects/ redirects to #projects
     to_page = [l for l in p.links if l.split("#")[0].rstrip("/") == "/projects"]
     check("home: no link to /projects/", not to_page, ", ".join(to_page))
@@ -697,6 +711,52 @@ def check_palette():
           ", ".join(w.replace("\\b", "") for w in red) or "no site.css")
 
 
+def sparkle(d):
+    """(x, y, r) of the four-pointed sparkle that the path data d draws, or None if it is not one: a
+    closed M and four Q sides, its four tips equally far (r) from their centre (x, y) and a quarter
+    turn apart, all the same way round, each side's control point nearer that centre than its chord's
+    midpoint (so the sides curve in)."""
+    v = [float(n) for n in re.findall(r"-?(?:\d+\.?\d*|\.\d+)", d)]
+    if not re.fullmatch(r"\s*M[^A-Za-z]+(?:Q[^A-Za-z]+){4}Z\s*", d) or len(v) != 18 or v[:2] != v[16:]:
+        return None
+    tips, ctrl = [v[i:i + 2] for i in (0, 4, 8, 12)], [v[i:i + 2] for i in (2, 6, 10, 14)]
+    x, y = sum(p[0] for p in tips) / 4, sum(p[1] for p in tips) / 4
+    rel = [(px - x, py - y) for px, py in tips]
+    r = sum(math.hypot(*p) for p in rel) / 4
+    way = lambda a, b: a[0] * b[1] - a[1] * b[0] > 0
+    for i in range(4):
+        a, b, (qx, qy) = rel[i], rel[(i + 1) % 4], ctrl[i]
+        if (abs(math.hypot(*a) - r) > .02 * r or abs(a[0] * b[0] + a[1] * b[1]) > .02 * r * r
+                or way(a, b) != way(rel[0], rel[1])
+                or math.hypot(qx - x, qy - y) >= math.hypot((a[0] + b[0]) / 2, (a[1] + b[1]) / 2)):
+            return None
+    return x, y, r
+
+
+def check_favicon():
+    """The icon is a sparkle (Addendum 25): favicon.svg draws two closed four-pointed sparkles with
+    inward-curving sides, a main one and a smaller one up and to its right, in --star on --paper."""
+    svg = read_site("assets/favicon/favicon.svg")
+    drawn = re.findall(r'<path\b[^>]*\bd="([^"]+)"', svg)
+    found = sorted((s for s in map(sparkle, drawn) if s), key=lambda s: -s[2])
+    ok = len(drawn) == len(found) == 2
+    if ok:
+        (mx, my, mr), (sx, sy, sr) = found
+        ok = .2 <= sr / mr <= .5 and sx > mx and sy < my
+    check("favicon: favicon.svg draws a sparkle and a smaller one up and to its right", ok,
+          f"{len(drawn)} path(s), {len(found)} of them sparkles" if svg else "no favicon.svg")
+    m = re.search(r":root\s*\{([^}]*)\}", read_site("assets/css/site.css"))
+    t = tokens(m.group(1)) if m else {}
+    star, paper = t.get("--star", "").upper(), t.get("--paper", "").upper()
+    fills = [c.upper() for c in re.findall(r'<rect\b[^>]*\bfill="(#[0-9A-Fa-f]{6})"', svg)]
+    marks = [c.upper() for c in re.findall(r'<path\b[^>]*\bfill="(#[0-9A-Fa-f]{6})"', svg)]
+    colours = {c.upper() for c in re.findall(r"#[0-9A-Fa-f]{6}\b", svg)}
+    check("favicon: --star sparkles on --paper, no other colour, stroke or opacity",
+          bool(star and paper) and fills == [paper] and marks == [star, star] and colours == {star, paper}
+          and "stroke" not in svg and "opacity" not in svg,
+          f"background {fills}, sparkles {marks}, want {paper} and {star}")
+
+
 def check_fonts():
     families = set(re.findall(r"font-family:\s*'([^']+)'", read_site("assets/css/fonts.css")))
     check("fonts: fonts.css declares only Quicksand", families == {"Quicksand"}, ", ".join(sorted(families)))
@@ -759,6 +819,7 @@ def main():
     check_subpages(parsed)
     check_contrast()
     check_palette()
+    check_favicon()
     check_fonts()
     if args.external:
         check_external(parsed)
