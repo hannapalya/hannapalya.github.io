@@ -15,8 +15,8 @@ tagline, the JSON-LD and the intro on role, employer and city; the links under t
 JSON-LD sameAs; the X link and the twitter: tags. Only the content rules are fixed (DEGREE,
 UNPUBLISHED, MUST_NOT_SAY_TEXT and the terms in the untracked .superpowers/must-not-say.txt), with
 the retired wording, the phrases the intro must say (MUST_SAY) and the names it must link
-(INTRO_LINKS), the "other projects" line (OTHER_PROJECTS) and the Scholar link's text,
-"Google Scholar".
+(INTRO_LINKS), the search description (DESCRIPTION), the "other projects" line (OTHER_PROJECTS) and
+the Scholar link's text, "Google Scholar".
 """
 import argparse, glob, gzip, html, html.parser, json, math, os, re, subprocess, sys
 import urllib.error, urllib.parse, urllib.request
@@ -54,6 +54,11 @@ MUST_SAY = ["threat modelling for AI-enabled biological risks", "I\u2019m based 
 # (Addendum 26). The link is the name itself, so "the" in "the Centre for Long-Term Resilience" is not linked.
 INTRO_LINKS = [("Fourth Eon Biosecurity", "https://fourtheon.bio"),
                ("Centre for Long-Term Resilience", "https://www.longtermresilience.org")]
+# The home page's search and link-preview description (`description:` in _config.yml, Addendum 27): the
+# <meta name="description"> and og:description say exactly this, in the intro's words. Change it here
+# when you change that sentence.
+DESCRIPTION = ("Hanna P\u00e1lya is a researcher at the Centre for the Governance of AI, where she works on "
+               "threat modelling for AI-enabled biological risks.")
 # The "other projects" section under writing (#projects): one line of these links, as (name, url), in
 # this order and with nothing else. Its content is _data/other_projects.yml; add a project to both.
 OTHER_PROJECTS = [("Cliver", "https://cliver.bio"),
@@ -82,7 +87,9 @@ MUST_NOT_SAY = ["Oxford", "Blog post 1", "minima", "PhD student", "Palya H", "Fu
                 # the intro says "I'm based in London." (Addendum 22), not where she lives
                 "I live in London",
                 # the PhD clause is plainer (Addendum 26): "early outbreak detection from symptom-based data"
-                "detecting pandemics earlier from syndromic surveillance data"]
+                "detecting pandemics earlier from syndromic surveillance data",
+                # the search description says what the intro says (Addendum 27), not this earlier wording
+                "studies how advances in AI could change biological risks"]
 # More terms to keep off the site are listed, one per line, in this untracked file. Without it the
 # check prints SKIP. Blank lines and lines starting with # are ignored. The terms before a line that
 # says [nowhere] must not appear on the site's own pages (PRIVATE; a WARN on a post); the terms after
@@ -564,6 +571,10 @@ def check_home(parsed):
     handles = {metas.get("twitter:site"), metas.get("twitter:creator")}
     check("home: twitter:site and twitter:creator are the X handle in the links",
           not xs or handles == {"@" + xs[0]}, f"{sorted(map(str, handles))} vs {xs}")
+    # the search description and link previews say DESCRIPTION: both the plain and the Open Graph tag
+    for tag in ("description", "og:description"):
+        check(f"home: <meta {tag}> is the description in DESCRIPTION", metas.get(tag) == DESCRIPTION,
+              f"{metas.get(tag)!r}")
     scholar = [h for h in profiles if "scholar.google" in h]
     # the Scholar link is worded "Google Scholar" (spec Addendum 23), not just "Scholar"
     ln = parse_html(line.group(0)) if line else None

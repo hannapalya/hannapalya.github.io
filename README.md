@@ -22,7 +22,7 @@ These facts are written in more than one place, so change every one in the row. 
 
 | Fact | Where it is written |
 | --- | --- |
-| Role and employer | `index.md` (the intro). `_config.yml`: `tagline:` (the home page's title in search results and browser tabs, and the share image) and `description:` (the summary search engines and link previews show). `_includes/person.json-ld.html`: `jobTitle`, and `worksFor` with the employer's name and website. Then run `python3 scripts/social_card.py` to redraw the share image, which takes the role from `tagline:`. |
+| Role and employer | `index.md` (the intro). `_config.yml`: `tagline:` (the home page's title in search results and browser tabs, and the share image) and `description:` (the summary search engines and link previews show; `check_site.py` expects its exact words in `DESCRIPTION`, so change that too). `_includes/person.json-ld.html`: `jobTitle`, and `worksFor` with the employer's name and website. Then run `python3 scripts/social_card.py` to redraw the share image, which takes the role from `tagline:`. |
 | City | `index.md` (the intro) and `homeLocation` in `_includes/person.json-ld.html`. |
 | Email | `email:` in `_config.yml`. It is used for the link under the intro and in the JSON-LD. |
 | Profile links (Google Scholar, GitHub, LinkedIn, X) | `_config.yml`: `links:` (the line under the intro) and the same addresses again under `social.links:` (the JSON-LD `sameAs`). For X, also `twitter.username` and `author.twitter`. For Google Scholar, also `redirect_to:` in `papers.md` (/papers/ sends visitors there). To add or remove a profile, also edit the links line in `_layouts/home.html`, which names each one. |
